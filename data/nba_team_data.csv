@@ -1,31 +1,31 @@
-nameTeam,idTeam,slugTeam,teamName,cityTeam,teamNameFull,idConference,idDivision,countTeamSeasons,countTeamWins,countTeamLosses,countPlayoffQualified,countDivisionTitles,countConferenceTitles,countLeagueTitles
-Washington Wizards,1610612764,WAS,wizards,Washington,Wizards,1,5,62,2230,2708,30,8,4,1
-Utah Jazz,1610612762,UTA,jazz,Utah,Jazz,2,3,49,2119,1765,31,12,2,0
-Toronto Raptors,1610612761,TOR,raptors,Toronto,Raptors,1,1,28,1039,1123,13,7,1,1
-San Antonio Spurs,1610612759,SAS,spurs,San Antonio,Spurs,2,6,47,2267,1451,39,22,6,5
-Sacramento Kings,1610612758,SAC,kings,Sacramento,Kings,2,4,75,2661,3194,29,6,0,1
-Portland Trail Blazers,1610612757,POR,blazers,Portland,Trail Blazers,2,3,53,2248,1964,37,7,3,1
-Phoenix Suns,1610612756,PHX,suns,Phoenix,Suns,2,4,55,2344,2031,31,9,3,0
-Philadelphia 76ers,1610612755,PHI,sixers,Philadelphia,76ers,1,1,74,3008,2784,52,13,5,3
-Orlando Magic,1610612753,ORL,magic,Orlando,Magic,1,5,34,1238,1416,16,7,2,0
-Oklahoma City Thunder,1610612760,OKC,thunder,Oklahoma City,Thunder,2,3,56,2380,2077,32,11,4,1
-New York Knicks,1610612752,NYK,knicks,New York,Knicks,1,1,77,2885,3072,42,9,4,2
-New Orleans Pelicans,1610612740,NOP,pelicans,New Orleans,Pelicans,2,6,21,749,870,8,2,0,0
-Minnesota Timberwolves,1610612750,MIN,timberwolves,Minnesota,Timberwolves,2,3,34,1056,1589,10,1,0,0
-Milwaukee Bucks,1610612749,MIL,bucks,Milwaukee,Bucks,1,2,55,2293,2082,34,18,3,2
-Miami Heat,1610612748,MIA,heat,Miami,Heat,1,5,35,1438,1298,23,15,6,3
-Memphis Grizzlies,1610612763,MEM,grizzlies,Memphis,Grizzlies,2,6,28,929,1233,12,1,0,0
-Los Angeles Lakers,1610612747,LAL,lakers,Los Angeles,Lakers,2,4,75,3465,2391,62,35,19,17
-Los Angeles Clippers,1610612746,LAC,clippers,LA,Clippers,2,4,53,1756,2455,16,2,0,0
-Indiana Pacers,1610612754,IND,pacers,Indiana,Pacers,1,2,47,1855,1862,27,6,1,0
-Houston Rockets,1610612745,HOU,rockets,Houston,Rockets,2,6,56,2309,2148,34,8,4,2
-Golden State Warriors,1610612744,GSW,warriors,Golden State,Warriors,2,4,77,2885,3069,36,12,7,7
-Detroit Pistons,1610612765,DET,pistons,Detroit,Pistons,1,2,75,2800,3051,42,12,5,3
-Denver Nuggets,1610612743,DEN,nuggets,Denver,Nuggets,2,3,47,1853,1866,28,9,0,0
-Dallas Mavericks,1610612742,DAL,mavericks,Dallas,Mavericks,2,6,43,1717,1676,24,4,2,1
-Cleveland Cavaliers,1610612739,CLE,cavaliers,Cleveland,Cavaliers,1,2,53,1941,2262,22,7,5,1
-Chicago Bulls,1610612741,CHI,bulls,Chicago,Bulls,1,2,57,2310,2221,36,9,6,6
-Charlotte Hornets,1610612766,CHA,hornets,Charlotte,Hornets,1,5,33,1130,1435,10,0,0,0
-Brooklyn Nets,1610612751,BKN,nets,Brooklyn,Nets,1,1,47,1583,2136,23,4,2,0
-Boston Celtics,1610612738,BOS,celtics,Boston,Celtics,1,1,77,3525,2440,59,33,10,17
-Atlanta Hawks,1610612737,ATL,hawks,Atlanta,Hawks,1,5,74,2860,2930,48,13,0,1
+nameTeam,idTeam,slugTeam,cityTeam,teamNameFull,idConference,idDivision,countTeamSeasons,countTeamWins,countTeamLosses,countPlayoffQualified,countDivisionTitles,countConferenceTitles,countLeagueTitles
+Washington Wizards,1610612764,WAS,Washington,Wizards,1,5,62,2230,2708,30,8,4,1
+Utah Jazz,1610612762,UTA,Utah,Jazz,2,3,49,2119,1765,31,12,2,0
+Toronto Raptors,1610612761,TOR,c,Raptors,1,1,28,1039,1123,13,7,1,1
+San Antonio Spurs,1610612759,SAS,San Antonio,Spurs,2,6,47,2267,1451,39,22,6,5
+Sacramento Kings,1610612758,SAC,Sacramento,Kings,2,4,75,2661,3194,29,6,0,1
+Portland Trail Blazers,1610612757,POR,Portland,Trail Blazers,2,3,53,2248,1964,37,7,3,1
+Phoenix Suns,1610612756,PHX,Phoenix,Suns,2,4,55,2344,2031,31,9,3,0
+Philadelphia 76ers,1610612755,PHI,Philadelphia,76ers,1,1,74,3008,2784,52,13,5,3
+Orlando Magic,1610612753,ORL,Orlando,Magic,1,5,34,1238,1416,16,7,2,0
+Oklahoma City Thunder,1610612760,OKC,Oklahoma City,Thunder,2,3,56,2380,2077,32,11,4,1
+New York Knicks,1610612752,NYK,New York,Knicks,1,1,77,2885,3072,42,9,4,2
+New Orleans Pelicans,1610612740,NOP,New Orleans,Pelicans,2,6,21,749,870,8,2,0,0
+Minnesota Timberwolves,1610612750,MIN,Minnesota,Timberwolves,2,3,34,1056,1589,10,1,0,0
+Milwaukee Bucks,1610612749,MIL,Milwaukee,Bucks,1,2,55,2293,2082,34,18,3,2
+Miami Heat,1610612748,MIA,Miami,Heat,1,5,35,1438,1298,23,15,6,3
+Memphis Grizzlies,1610612763,MEM,Memphis,Grizzlies,2,6,28,929,1233,12,1,0,0
+Los Angeles Lakers,1610612747,LAL,Los Angeles,Lakers,2,4,75,3465,2391,62,35,19,17
+Los Angeles Clippers,1610612746,LAC,LA,Clippers,2,4,53,1756,2455,16,2,0,0
+Indiana Pacers,1610612754,IND,Indiana,Pacers,1,2,47,1855,1862,27,6,1,0
+Houston Rockets,1610612745,HOU,Houston,Rockets,2,6,56,2309,2148,34,8,4,2
+Golden State Warriors,1610612744,GSW,Golden State,Warriors,2,4,77,2885,3069,36,12,7,7
+Detroit Pistons,1610612765,DET,Detroit,Pistons,1,2,75,2800,3051,42,12,5,3
+Denver Nuggets,1610612743,DEN,Denver,Nuggets,2,3,47,1853,1866,28,9,0,0
+Dallas Mavericks,1610612742,DAL,Dallas,Mavericks,2,6,43,1717,1676,24,4,2,1
+Cleveland Cavaliers,1610612739,CLE,Cleveland,Cavaliers,1,2,53,1941,2262,22,7,5,1
+Chicago Bulls,1610612741,CHI,Chicago,Bulls,1,2,57,2310,2221,36,9,6,6
+Charlotte Hornets,1610612766,CHA,Charlotte,Hornets,1,5,33,1130,1435,10,0,0,0
+Brooklyn Nets,1610612751,BKN,Brooklyn,Nets,1,1,47,1583,2136,23,4,2,0
+Boston Celtics,1610612738,BOS,Boston,Celtics,1,1,77,3525,2440,59,33,10,17
+Atlanta Hawks,1610612737,ATL,Atlanta,Hawks,1,5,74,2860,2930,48,13,0,1
