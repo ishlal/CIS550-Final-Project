@@ -22,7 +22,7 @@ WHERE namePlayer = 'Zach Lavine' AND year = 2022 AND typeAction = 'Layup Shot';
 # Basic Query Six:
 
 
-# Complex Query One: Get the historical averages by zone
+# Complex Query One: Get the historical averages by zone (need to improve)
 
 WITH NBA_Average_By_Zone AS (SELECT zoneName, zoneRange, zoneBasic, SUM(isShotAttempted) as attempts, SUM(isShotMade) as makes
                              FROM Shots
@@ -47,10 +47,22 @@ SELECT Game_Averages.zoneName as zoneName, Game_Averages.zoneRange as zoneRange,
 FROM Game_Averages JOIN Historical_Averages
     ON Game_Averages.zoneBasic = Historical_Averages.zoneBasic
         AND Game_Averages.zoneName = Historical_Averages.zoneName
-        AND Game_Averages.zoneRange = Historical_Averages.zoneRange
+        AND Game_Averages.zoneRange = Historical_Averages.zoneRange;
 
 
-# Complex Query Three:
+# Complex Query Three: Get most clutch players (IN PROGRESS)
+
+WITH Historical_Averages AS (SELECT zoneName, zoneRange, zoneBasic, average, attempts, std
+                             FROM (SELECT zoneName, zoneRange, zoneBasic, SUM(isShotAttempted) as attempts, AVG(isShotMade) as average,
+                                          STD(isShotMade) std
+                                   FROM Shots
+                                   GROUP BY zoneName, zoneRange, zoneBasic) as all_games),
+    Players_Averages_Clutch AS (SELECT playerID, zoneName, zoneRange, zoneBasic, makes/attempts as percentage, attempts
+                       FROM (SELECT playerID, zoneName, zoneRange, zoneBasic, SUM(isShotAttempted) as attempts, SUM(isShotMade) as makes
+                             FROM Shots
+                             WHERE quarter = 4 AND minRemaining <= 5
+                             GROUP BY zoneName, zoneRange, zoneBasic, playerID) as wanted_games)
+    SELECT * FROM Historical_Averages
 
 
 
