@@ -22,15 +22,29 @@ WHERE date=20141028
   AND (12*quarter + (12-minRemaining)) > 24
   AND nameTeam='New Orleans Pelicans'
 
-# Basic Query Four:
+# Basic Query Four: Gets court locations of all shots for a given player. Can be used for shot chart
+SELECT namePlayer, nameTeam, typeEvent, zoneName, zoneRange, locationX, locationY
+FROM Shots
+WHERE date=20141028
+  AND namePlayer = 'Ryan Anderson'
+
+# Basic Query Five: Gets all made shots of a player within the last x seconds of a quarter. Can be used for "clutch" index
+SELECT namePlayer, nameTeam, typeEvent, zoneName, zoneRange, quarter, minRemaining, secRemaining
+FROM Shots
+WHERE namePlayer = 'Ryan Anderson'
+    AND date = 20141028
+    AND minRemaining < 1
+    AND secRemaining <= 40
+    AND isShotMade = 1
 
 
-# Basic Query Five:
-
-
-
-# Basic Query Six:
-
+# Basic Query Six: Gets all shots of a specific type for a player in a single season. Can be used for basic player stats
+SELECT namePlayer, nameTeam, typeEvent, typeShot, typeAction
+FROM Shots
+WHERE namePlayer = 'Ryan Anderson'
+    AND slugSeason= '2014-15'
+    AND typeShot = '3PT Field Goal'
+    AND typeAction = 'Jump Shot'
 
 # Complex Query One: Get the historical averages by zone
 
