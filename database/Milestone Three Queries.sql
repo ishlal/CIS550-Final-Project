@@ -6,11 +6,21 @@ SELECT *
 FROM Shots
 WHERE namePlayer = 'Zach Lavine' AND year = 2022 AND typeAction = 'Layup Shot';
 
-# Basic Query Two:
+# Basic Query Two: Gets shots for a given player within a time frame. Can be used for luckiness index for players
+SELECT namePlayer, nameTeam, typeEvent, zoneName, quarter, minRemaining
+FROM Shots
+WHERE date=20141028
+  AND (12*quarter + (12-minRemaining)) < 36
+  AND (12*quarter + (12-minRemaining)) > 24
+  AND namePlayer='Eric Gordon'
 
-
-# Basic Query Three:
-
+# Basic Query Three: Gets shots for a given team within a time frame. Can be used for luckiness index for team
+SELECT namePlayer, nameTeam, typeEvent, zoneName, quarter, minRemaining
+FROM Shots
+WHERE date=20141028
+  AND (12*quarter + (12-minRemaining)) < 36
+  AND (12*quarter + (12-minRemaining)) > 24
+  AND nameTeam='New Orleans Pelicans'
 
 # Basic Query Four:
 
