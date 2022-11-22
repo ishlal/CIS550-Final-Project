@@ -6,8 +6,9 @@ these discussions, we’ve noticed that there is information/metrics we want to 
 way of calculating/identifying. Our goal is to create a dashboard to make this information easy to access and
 understand, so that people can have more fully informed discussions/debate about the NBA.
 
-## Features to Implement
+# Feature
 
+## Intend to Implement
 1. Luckiness Index: 
   Given a game, determine how “lucky” a team was, by comparing the shots they took/made
 relative to expected performance on a similar shot profile. The user can give some parameters when defining this value (ie how far to look back,
@@ -18,7 +19,7 @@ weightage on different shots, etc.)
 5. Game Report: Similar idea to HW2 chart, just some basic descriptive statistics about a given game
 6. Basic player/team statistics: A simple page displaying season statistics for any individual player or any individual team
 
-## Additional Features to Consider Implementing
+## Possibly Implement
 
 1. Clutch Index: Extending Win Probability onto an individual player basis (how "clutch" was each player in contributing to the win)
 2. Player Value Index: Visualizing a player’s value relative to their contract value (using some stat like WAR), and can look over time, compared with other players, etc.
