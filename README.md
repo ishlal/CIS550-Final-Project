@@ -6,7 +6,7 @@ these discussions, we’ve noticed that there is information/metrics we want to 
 way of calculating/identifying. Our goal is to create a dashboard to make this information easy to access and
 understand, so that people can have more fully informed discussions/debate about the NBA.
 
-# Feature
+# Features
 
 ## Intend to Implement
 1. Luckiness Index: 
