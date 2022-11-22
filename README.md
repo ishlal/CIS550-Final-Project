@@ -24,3 +24,9 @@ weightage on different shots, etc.)
 2. Player Value Index: Visualizing a player’s value relative to their contract value (using some stat like WAR), and can look over time, compared with other players, etc.
 3. Team Championship Odds: Calculated based on team statistics through a season (again, there are models like this that exist, but is another nice to have for our dashboard)
 4. Some type of betting/live odds information (could be related to win probability)
+
+# Directory Descriptions
+
+The `data` directory consists of three csv files, containing information on the players, teams, and the game logs per team for the eight NBA seasons from 2014-2015 to 2021-2022. 
+
+The `database` directory consists of two files -- one being the DDL for our database, called NBA, with three tables: Players, Teams, and Shots; and the other being our ten queries for Milestone 3, including our four complex queries and descriptions of what each query does. 
