@@ -1,0 +1,9 @@
+{
+    "rds_host": "final-project.cqe7jlkyu6p8.us-east-1.rds.amazonaws.com",
+    "rds_port": "3306",
+    "rds_user": "krishaandramji",
+    "rds_password" : "DBprfin550$",
+    "rds_db": "NBA",
+    "server_host": "127.0.0.1",
+    "server_port":"8080"
+}
