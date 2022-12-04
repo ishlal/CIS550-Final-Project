@@ -35,7 +35,17 @@ app.get('/season/player', routes.getSeasonShotsOfPlayer)
 // Route 8 - register as GET
 app.get('/shots/player/distribution', routes.getShotDistribution)
 
+// Route 9 - register as GET
+app.get('/players/clutch', routes.getClutchPlayers)
 
+// Route 10 - register as GET
+app.get('/luck/team', routes.getLuckyPerformances)
+
+// Route 11 - register as GET
+app.get('/luck/player', routes.getLuckiestPlayerPerformances)
+
+// Route 12 - register as GET
+app.get('/player/ideal', routes.getIdealShotDistribution)
 
 
 app.listen(config.server_port, () => {
