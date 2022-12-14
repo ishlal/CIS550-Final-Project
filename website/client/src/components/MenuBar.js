@@ -23,8 +23,8 @@ function MenuBar(props) {
         </NavLink>
       </NavItem>
       <NavItem>
-        <NavLink active  href="/games" >
-          Games
+        <NavLink active  href="/teams" >
+          Teams
         </NavLink>
       </NavItem>
       <NavItem>

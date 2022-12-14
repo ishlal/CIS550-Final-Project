@@ -8,7 +8,7 @@ import {
 
 import HomePage from './pages/HomePage';
 import PlayersPage from './pages/PlayersPage';
-import GamesPage from './pages/GamesPage';
+import TeamsPage from './pages/TeamsPage';
 import ClutchPage from './pages/ClutchPage';
 import LuckPage from './pages/LuckPage';
 import 'antd/dist/antd.css';
@@ -33,9 +33,9 @@ ReactDOM.render(
 			)}
 		/>
         <Route exact
-			path="/games"
+			path="/teams"
 			render={() => (
-				<GamesPage />
+				<TeamsPage />
 			)}
 		/>
 		<Route exact

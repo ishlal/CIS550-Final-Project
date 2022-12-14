@@ -9,6 +9,7 @@ function HomePage(props) {
     <div>
       <MenuBar/>
       <h1>Welcome to the NBA Database!</h1>
+      <h2>Click on a link to get started!</h2>
     </div>
   )
 }
