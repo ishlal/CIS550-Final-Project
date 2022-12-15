@@ -81,18 +81,26 @@ SELECT gs.playerID as playerID, gs.gameID as gameID, Players.name as name, gs.lu
     ORDER BY luck_index desc;
 
 # query to get luckiness index for all games for specific player
+WITH player_id AS (SELECT playerID from Players WHERE name = 'Seth Curry')
 SELECT gs.playerID as playerID, gs.gameID as gameID, Players.name as name, gs.luck_index as luck_index, attempts
     FROM (SELECT playerID, gameID, AVG(z_score) luck_index, SUM(attempts) as attempts
         FROM (SELECT playerID, gameID, zoneName, zoneBasic, zoneRange, (player_avg - pop_average)/player_std as z_score, attempts
             FROM (
                 SELECT playerID, gameID, p.zoneName as zoneName, p.zoneRange as zoneRange, p.zoneBasic as zoneBasic, p.average as player_avg,
                     attempts, h.average as pop_average, std as pop_std, std/SQRT(attempts) as player_std
-                FROM (SELECT * FROM Game_Averages_Player WHERE playerID = 203552) p  LEFT JOIN Historical_Averages h ON
+                FROM (SELECT * FROM Game_Averages_Player WHERE playerID = (SELECT * FROM player_id)) p  LEFT JOIN Historical_Averages h ON
                         p.zoneRange = h.zoneRange AND p.zoneName = h.zoneName AND p.zoneBasic = h.zoneBasic
                 ) team_zones) player_scores
             GROUP BY playerID, gameID) gs LEFT JOIN Players ON gs.playerID = Players.playerID
     WHERE attempts >= 8
     ORDER BY luck_index desc;
+
+
+# query to get all shots for a game and player
+WITH player_id AS (SELECT playerID from Players WHERE name = 'Seth Curry')
+SELECT slugSeason, gameID, namePlayer, nameTeam, typeAction, typeShot, quarter, minRemaining, secRemaining, zoneBasic, zoneName, distance, isShotMade as made FROM Shots
+WHERE playerID = (SELECT * FROM player_id) AND gameID = 21900880
+ORDER BY quarter asc, minRemaining desc, secRemaining desc;
 
 # query to get ideal shot distribution
 WITH player_shots AS (SELECT playerID, zoneRange, zoneBasic, SUM(isShotAttempted) as attempts, AVG(isShotMade) as make_percentage
@@ -218,3 +226,58 @@ FROM Shots
 WHERE playerID = (SELECT * FROM player_id)
 GROUP BY playerID, slugSeason
 ORDER BY slugSeason desc;
+
+CREATE INDEX team on Shots(teamID);
+
+WITH team_id AS (SELECT teamID FROM Teams WHERE name = 'San Antonio Spurs' LIMIT 1)
+SELECT teamID, slugSeason,
+       SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Center' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Center' THEN isShotAttempted ELSE 0 END) as center_three,
+
+       SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Left Side Center' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Left Side Center' THEN isShotAttempted ELSE 0 END) as lWing_three,
+
+       SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Right Side Center' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Right Side Center' THEN isShotAttempted ELSE 0 END) as rWing_three,
+
+       SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Center' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Center' THEN isShotAttempted ELSE 0 END) as center_paint,
+
+       SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Left Side' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Left Side' THEN isShotAttempted ELSE 0 END) as left_paint,
+
+       SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Right Side' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Right Side' THEN isShotAttempted ELSE 0 END) as right_paint,
+
+       SUM(CASE WHEN zoneName = 'Center' AND zoneBasic = 'Restricted Area' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneName = 'Center' AND zoneBasic = 'Restricted Area' THEN isShotAttempted ELSE 0 END) as restricedArea,
+
+       SUM(CASE WHEN zoneBasic = 'Right Corner 3' AND zoneName = 'Right Side' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Right Corner 3' AND zoneName = 'Right Side' THEN isShotAttempted ELSE 0 END) as rCorner_three,
+
+       SUM(CASE WHEN zoneBasic = 'Left Corner 3' AND zoneName = 'Left Side' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Left Corner 3' AND zoneName = 'Left Side' THEN isShotAttempted ELSE 0 END) as lCorner_three,
+
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Left Side' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Left Side' THEN isShotAttempted ELSE 0 END) as lCorner_mid,
+
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Left Side Center' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Left Side Center' THEN isShotAttempted ELSE 0 END) as lWing_mid,
+
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Right Side Center' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Right Side Center' THEN isShotAttempted ELSE 0 END) as rWing_mid,
+
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Right Side' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Right Side' THEN isShotAttempted ELSE 0 END) as rCorner_mid,
+
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Center' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Center' THEN isShotAttempted ELSE 0 END) as center_mid
+FROM Shots
+WHERE teamID = (SELECT * FROM team_id)
+GROUP BY teamID, slugSeason
+ORDER BY slugSeason desc;
+
+
+SELECT name, city, wins, losses, playoffApps, divisionTitles, confTitles, championships
+FROM Teams
+WHERE name = 'Atlanta Hawks'

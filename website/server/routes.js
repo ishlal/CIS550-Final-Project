@@ -370,7 +370,7 @@ async function getPlayerInfo(req, res) {
 
 // Route 14
 // Query to get shot performance per zone per season for player
-async function getPlayerInfo(req, res) {
+async function getPlayerShotPerformances(req, res) {
     const name = req.query.name ? req.query.name : "Zach Lavine"
 
     connection.query(`WITH player_id AS (SELECT playerID FROM Players WHERE name = ${name} LIMIT 1)
@@ -418,7 +418,133 @@ async function getPlayerInfo(req, res) {
            SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Center' THEN isShotAttempted ELSE 0 END) as center_mid
     FROM Shots
     WHERE playerID = (SELECT * FROM player_id)
-    GROUP BY playerID, slugSeason;`, function(error, results, fields) {
+    GROUP BY playerID, slugSeason
+    ORDER BY slugSeason desc`, function(error, results, fields) {
+        if (error) {
+            console.log(error);
+            res.json({ error: error });
+        } else if (results) {
+            res.json({ results: results });
+        }
+    })
+}
+
+// Route 15
+// Query to get shot performance per zone per season for team 
+async function getTeamShotPerformances(req, res) {
+    const name = req.query.name ? req.query.name : "San Antonio Spurs"
+
+    connection.query(`WITH team_id AS (SELECT teamID FROM Teams WHERE name = ${name} LIMIT 1)
+    SELECT teamID, slugSeason,
+           SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Center' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Center' THEN isShotAttempted ELSE 0 END) as center_three,
+    
+           SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Left Side Center' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Left Side Center' THEN isShotAttempted ELSE 0 END) as lWing_three,
+    
+           SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Right Side Center' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Right Side Center' THEN isShotAttempted ELSE 0 END) as rWing_three,
+    
+           SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Center' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Center' THEN isShotAttempted ELSE 0 END) as center_paint,
+    
+           SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Left Side' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Left Side' THEN isShotAttempted ELSE 0 END) as left_paint,
+    
+           SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Right Side' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Right Side' THEN isShotAttempted ELSE 0 END) as right_paint,
+    
+           SUM(CASE WHEN zoneName = 'Center' AND zoneBasic = 'Restricted Area' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneName = 'Center' AND zoneBasic = 'Restricted Area' THEN isShotAttempted ELSE 0 END) as restricedArea,
+    
+           SUM(CASE WHEN zoneBasic = 'Right Corner 3' AND zoneName = 'Right Side' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Right Corner 3' AND zoneName = 'Right Side' THEN isShotAttempted ELSE 0 END) as rCorner_three,
+    
+           SUM(CASE WHEN zoneBasic = 'Left Corner 3' AND zoneName = 'Left Side' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Left Corner 3' AND zoneName = 'Left Side' THEN isShotAttempted ELSE 0 END) as lCorner_three,
+    
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Left Side' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Left Side' THEN isShotAttempted ELSE 0 END) as lCorner_mid,
+    
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Left Side Center' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Left Side Center' THEN isShotAttempted ELSE 0 END) as lWing_mid,
+    
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Right Side Center' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Right Side Center' THEN isShotAttempted ELSE 0 END) as rWing_mid,
+    
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Right Side' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Right Side' THEN isShotAttempted ELSE 0 END) as rCorner_mid,
+    
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Center' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Center' THEN isShotAttempted ELSE 0 END) as center_mid
+    FROM Shots
+    WHERE teamID = (SELECT * FROM team_id)
+    GROUP BY teamID, slugSeason
+    ORDER BY slugSeason desc`, function(error, results, fields) {
+        if (error) {
+            console.log(error);
+            res.json({ error: error });
+        } else if (results) {
+            res.json({ results: results });
+        }
+    })
+}
+
+// Route 16 
+// Query Teams table for team information
+async function getTeamInfo(req, res) {
+    const name = req.query.name ? req.query.name : "Atlanta Hawks"
+
+    connection.query(`SELECT name, city, wins, losses, playoffApps, divisionTitles, confTitles, championships FROM Teams WHERE name = ${name} LIMIT 1`, function(error, results, fields) {
+        if (error) {
+            console.log(error);
+            res.json({ error: error });
+        } else if (results) {
+            res.json({ results: results });
+        }
+    })
+}
+
+// Route 17
+// Get all shots for a game and player
+async function getShotsPlayerGame(req, res) {
+    const name = req.query.name ? req.query.name : "Seth Curry"
+    const gameID = req.query.game ? req.query.game : 2190080
+
+
+    connection.query(`WITH player_id AS (SELECT playerID from Players WHERE name = ${name} LIMIT 1)
+SELECT slugSeason, gameID, namePlayer, nameTeam, typeAction, typeShot, quarter, minRemaining, secRemaining, zoneBasic, zoneName, distance, isShotMade as made FROM Shots
+WHERE playerID = (SELECT * FROM player_id) AND gameID = ${gameID}
+ORDER BY quarter asc, minRemaining desc, secRemaining desc`, function(error, results, fields) {
+        if (error) {
+            console.log(error);
+            res.json({ error: error });
+        } else if (results) {
+            res.json({ results: results });
+        }
+    })
+}
+
+// Route 18
+// 
+async function getLuckiestPerformancesForPlayer(req, res) {
+    const name = req.query.name ? req.query.name : "Seth Curry"
+    const gameID = req.query.minAttempts ? req.query.minAttempts : 8
+
+
+    connection.query(`WITH player_id AS (SELECT playerID from Players WHERE name = ${name})
+    SELECT gs.playerID as playerID, gs.gameID as gameID, Players.name as name, gs.luck_index as luck_index, attempts
+        FROM (SELECT playerID, gameID, AVG(z_score) luck_index, SUM(attempts) as attempts
+            FROM (SELECT playerID, gameID, zoneName, zoneBasic, zoneRange, (player_avg - pop_average)/player_std as z_score, attempts
+                FROM (
+                    SELECT playerID, gameID, p.zoneName as zoneName, p.zoneRange as zoneRange, p.zoneBasic as zoneBasic, p.average as player_avg,
+                        attempts, h.average as pop_average, std as pop_std, std/SQRT(attempts) as player_std
+                    FROM (SELECT * FROM Game_Averages_Player WHERE playerID = (SELECT * FROM player_id)) p  LEFT JOIN Historical_Averages h ON
+                            p.zoneRange = h.zoneRange AND p.zoneName = h.zoneName AND p.zoneBasic = h.zoneBasic
+                    ) team_zones) player_scores
+                GROUP BY playerID, gameID) gs LEFT JOIN Players ON gs.playerID = Players.playerID
+        WHERE attempts >= ${minAttempts}
+        ORDER BY luck_index desc;`, function(error, results, fields) {
         if (error) {
             console.log(error);
             res.json({ error: error });
