@@ -170,56 +170,63 @@ async function getSeasonShotsOfPlayer(req, res) {
 
 // Route 8
 // get distribution of player's shot locations 
+// Query to get optimal shot distribution for player 
 async function getShotDistribution(req, res) {
     const name = req.query.name ? req.query.name : "Zach Lavine"
 
-    connection.query(`WITH player_shots AS (SELECT playerID, zoneName, zoneRange, zoneBasic, SUM(isShotAttempted) as attempts, AVG(isShotMade) as make_percentage
-    FROM Shots
-    WHERE namePlayer = '${name}'
-    GROUP BY playerID, zoneName, zoneRange, zoneBasic
-    ORDER BY attempts desc),
-    total_attempts AS (SELECT SUM(attempts)
-            FROM player_shots
-            GROUP BY playerID)
-    SELECT playerID, zoneName, zoneRange, zoneBasic, attempts, make_percentage, attempts/(SELECT * FROM total_attempts) take_percentage
-    FROM player_shots`, function (error, results, fields) {
+    connection.query(`SELECT playerID from Players WHERE name = ${name}`, function(error, results, fields) {
         if (error) {
             console.log(error);
-            res.json({ error: error });
+            res.json({error : error});
         } else if (results) {
-            res.json({ results: results });
+            const response = JSON.parse(results);
+            if (len(response) == 0) {
+                res.json({error : 'No player found'});
+            } else {
+                const id = response[0].playerID
+                
+                connection.query(`WITH player_shots AS (SELECT playerID, zoneName, zoneRange, zoneBasic, SUM(isShotAttempted) as attempts, AVG(isShotMade) as make_percentage
+            FROM Shots
+            WHERE playerID = '${id}'
+            GROUP BY playerID, zoneName, zoneRange, zoneBasic
+            ORDER BY attempts desc),
+            total_attempts AS (SELECT SUM(attempts)
+                    FROM player_shots
+                    GROUP BY playerID)
+            SELECT playerID, zoneName, zoneRange, zoneBasic, attempts, make_percentage, attempts/(SELECT * FROM total_attempts) take_percentage
+            FROM player_shots`, function (error, results, fields) {
+                if (error) {
+                    console.log(error);
+                    res.json({ error: error });
+                } else if (results) {
+                    res.json({ results: results });
+                }
+            })
+            }         
         }
     })
 }
 
 // Route 9
 // Get most clutch players by z-score of their clutch performance (with min # of attempts)
+// Clutch Page: get clutchness rankings 
 async function getClutchPlayers(req, res) {
-    const minAttempts = req.query.min ? req.query.min : 0
+    const minAttempts = req.query.min ? req.query.min : 10
 
-    connection.query(`WITH Historical_Averages AS (SELECT zoneName, zoneRange, zoneBasic, average, std
-    FROM (SELECT zoneName, zoneRange, zoneBasic, AVG(isShotMade) as average,
-                     STD(isShotMade) std
-              FROM Shots
-              GROUP BY zoneName, zoneRange, zoneBasic) as all_games),
-    Players_Averages_Clutch AS (SELECT playerID, zoneName, zoneRange, zoneBasic, average, attempts
-    FROM (SELECT playerID, zoneName, zoneRange, zoneBasic, SUM(isShotAttempted) as attempts, AVG(isShotMade) as average
-            FROM Shots
-            WHERE quarter = 4 AND minRemaining <= 5 
-            GROUP BY zoneName, zoneRange, zoneBasic, playerID) as wanted_games)
+    connection.query(`
     SELECT player_clutch.playerID as playerID, Players.name as name, player_clutch.clutch_score as clutch_score, attempts
     FROM (SELECT playerID, AVG(z_score) clutch_score, SUM(attempts) as attempts
-    FROM(SELECT playerID, zoneName, zoneBasic, zoneRange, (player_avg - pop_average)/player_std as z_score, attempts
-    FROM (
-    SELECT playerID, p.zoneName as zoneName, p.zoneRange as zoneRange, p.zoneBasic as zoneBasic, p.average as player_avg,
-    attempts, h.average as pop_average, std as pop_std, std/SQRT(attempts) as player_std
-    FROM Players_Averages_Clutch p LEFT JOIN Historical_Averages h ON
-    p.zoneRange = h.zoneRange AND p.zoneName = h.zoneName AND p.zoneBasic = h.zoneBasic
-    ORDER BY playerID desc, attempts desc
-    ) player_zones) player_scores
-    GROUP BY playerID
-    HAVING SUM(attempts) > ${minAttempts}) player_clutch LEFT JOIN Players ON player_clutch.playerID = Players.playerID
-    ORDER BY clutch_score desc`, function (error, results, fields) {
+        FROM(SELECT playerID, zoneName, zoneBasic, zoneRange, (player_avg - pop_average)/player_std as z_score, attempts
+            FROM (
+                SELECT playerID, p.zoneName as zoneName, p.zoneRange as zoneRange, p.zoneBasic as zoneBasic, p.average as player_avg,
+                attempts, h.average as pop_average, std as pop_std, std/SQRT(attempts) as player_std
+                FROM Player_Averages_Clutch p LEFT JOIN Historical_Averages h ON
+                    p.zoneRange = h.zoneRange AND p.zoneName = h.zoneName AND p.zoneBasic = h.zoneBasic
+                ORDER BY playerID desc, attempts desc
+                ) player_zones) player_scores
+            GROUP BY playerID
+            HAVING SUM(attempts) > ${minAttempts}) player_clutch LEFT JOIN Players ON player_clutch.playerID = Players.playerID
+    ORDER BY clutch_score desc;`, function (error, results, fields) {
         if (error) {
             console.log(error);
             res.json({ error: error });
@@ -231,28 +238,46 @@ async function getClutchPlayers(req, res) {
 
 // Route 10
 // get luckiest shooting performances by a team in an individual game
+// Luckiness Page: query to get luckiness rankings 
 async function getLuckyPerformances(req, res) {
-    connection.query(`WITH Historical_Averages AS (SELECT zoneName, zoneRange, zoneBasic, average, std
-    FROM (SELECT zoneName, zoneRange, zoneBasic, AVG(isShotMade) as average,
-                    STD(isShotMade) std
-            FROM Shots
-            GROUP BY zoneName, zoneRange, zoneBasic) as all_games),
-    Game_Averages AS (SELECT teamID, gameID, zoneName, zoneRange, zoneBasic, average, attempts
-    FROM (SELECT teamID, gameID, zoneName, zoneRange, zoneBasic, SUM(isShotAttempted) as attempts, AVG(isShotMade) as average
-            FROM Shots
-            # could add WHERE clause here to subset which games you want
-            GROUP BY zoneName, zoneRange, zoneBasic, teamID, gameID) as wanted_games)
-    SELECT gs.teamID as teamID, gs.gameID as gameID, Teams.name as name, gs.luck_index as luck_index, attempts
-    FROM (SELECT teamID, gameID, AVG(z_score) luck_index, SUM(attempts) as attempts
-    FROM(SELECT teamID, gameID, zoneName, zoneBasic, zoneRange, (team_avg - pop_average)/team_std as z_score, attempts
-    FROM (
-    SELECT teamID, gameID, p.zoneName as zoneName, p.zoneRange as zoneRange, p.zoneBasic as zoneBasic, p.average as team_avg,
-    attempts, h.average as pop_average, std as pop_std, std/SQRT(attempts) as team_std
-    FROM Game_Averages p LEFT JOIN Historical_Averages h ON
-    p.zoneRange = h.zoneRange AND p.zoneName = h.zoneName AND p.zoneBasic = h.zoneBasic
-    ) team_zones) team_scores
-    GROUP BY teamID, gameID) gs LEFT JOIN Teams ON gs.teamID = Teams.teamID
-    ORDER BY luck_index desc`, function (error, results, fields) {
+    connection.query(`SELECT gs.teamID as teamID, gs.gameID as gameID, Teams.name as name, gs.luck_index as luck_index, attempts
+        FROM (SELECT teamID, gameID, AVG(z_score) luck_index, SUM(attempts) as attempts
+            FROM(SELECT teamID, gameID, zoneName, zoneBasic, zoneRange, (team_avg - pop_average)/team_std as z_score, attempts
+                FROM (
+                    SELECT teamID, gameID, p.zoneName as zoneName, p.zoneRange as zoneRange, p.zoneBasic as zoneBasic, p.average as team_avg,
+                    attempts, h.average as pop_average, std as pop_std, std/SQRT(attempts) as team_std
+                    FROM Game_Averages_Team p LEFT JOIN Historical_Averages h ON
+                        p.zoneRange = h.zoneRange AND p.zoneName = h.zoneName AND p.zoneBasic = h.zoneBasic
+                    ) team_zones) team_scores
+                GROUP BY teamID, gameID) gs LEFT JOIN Teams ON gs.teamID = Teams.teamID
+        ORDER BY luck_index desc;`, function (error, results, fields) {
+        if (error) {
+            console.log(error);
+            res.json({ error: error });
+        } else if (results) {
+            res.json({ results: results });
+        }
+    })
+}
+
+// Route 10.1
+// get luckiest shooting performances by a team in an individual game
+// Luckiness Page: query to get luckiness rankings (filter on season), (filter on team)
+async function getLuckyPerformancesTeamSeason(req, res) {
+    const team = req.query.team ? req.query.team : 1610612759
+    const season = req.query.season ? req.query.season : "2014-15"
+
+    connection.query(`SELECT gs.teamID as teamID, gs.gameID as gameID, Teams.name as name, gs.slugSeason AS season, gs.luck_index as luck_index, attempts
+    FROM (SELECT teamID, gameID, slugSeason, AVG(z_score) luck_index, SUM(attempts) as attempts
+        FROM(SELECT teamID, gameID, slugSeason, zoneName, zoneBasic, zoneRange, (team_avg - pop_average)/team_std as z_score, attempts
+            FROM (
+                SELECT teamID, gameID, slugSeason, p.zoneName as zoneName, p.zoneRange as zoneRange, p.zoneBasic as zoneBasic, p.average as team_avg,
+                attempts, h.average as pop_average, std as pop_std, std/SQRT(attempts) as team_std
+                FROM (SELECT * FROM Game_Averages_Team WHERE teamID = ${team} AND slugSeason = ${season}) p
+                        LEFT JOIN Historical_Averages h ON p.zoneRange = h.zoneRange AND p.zoneName = h.zoneName AND p.zoneBasic = h.zoneBasic
+                ) team_zones) team_scores
+            GROUP BY teamID, gameID) gs LEFT JOIN Teams ON gs.teamID = Teams.teamID
+    ORDER BY luck_index desc;`, function (error, results, fields) {
         if (error) {
             console.log(error);
             res.json({ error: error });

@@ -134,7 +134,7 @@ WITH Historical_Averages AS (SELECT zoneName, zoneRange, zoneBasic, average, std
 # Complex Query Four: Determine the ideal shot distribution for a given player and compare it to their actual shot distribution
 WITH player_shots AS (SELECT playerID, zoneRange, zoneBasic, SUM(isShotAttempted) as attempts, AVG(isShotMade) as make_percentage
                     FROM Shots
-                    WHERE namePlayer = 'Zach LaVine' # can add more clauses here to further subset
+                    WHERE namePlayer = 'Stephen Curry' # can add more clauses here to further subset
                     GROUP BY playerID, zoneRange, zoneBasic
                     ORDER BY attempts desc),
     total_attempts AS (SELECT SUM(attempts)
@@ -147,4 +147,5 @@ WITH player_shots AS (SELECT playerID, zoneRange, zoneBasic, SUM(isShotAttempted
                        FROM shot_distribution
                        GROUP BY playerID)
 SELECT s.playerID, p.name, zoneRange, zoneBasic, attempts, make_percentage, take_percentage, expected_points/(SELECT * FROM total_expected) opt_take_percentage
-FROM shot_distribution s LEFT JOIN Players p on s.playerID = p.playerID;
+FROM shot_distribution s LEFT JOIN Players p on s.playerID = p.playerID
+ORDER BY opt_take_percentage;
