@@ -31,27 +31,33 @@ CREATE TABLE Teams(
     PRIMARY KEY (teamID)
 );
 
-CREATE TABLE Shots(
-    year int,
+CREATE TABLE Games(
     slugSeason varchar(12),
+    gameID int,
+    date varchar(16),
+    slugMatchup varchar(12),
+    homeID int,
+    awayID int,
+    home_score int,
+    away_score int,
+    PRIMARY KEY (gameID),
+    FOREIGN KEY (homeID) REFERENCES Teams(teamID),
+    FOREIGN KEY (awayID) REFERENCES Teams(teamID)
+);
+
+CREATE TABLE Shots(
     teamID int,
     playerID int,
     typeGrid varchar(32),
-    namePlayer varchar(32),
-    nameTeam varchar(32),
     typeEvent varchar(32),
     typeAction varchar(32),
     typeShot varchar(32),
-    date varchar(32),
-    homeSlug varchar(8),
-    awaySlug varchar(8),
     gameID int,
     eventID int,
     quarter int,
     minRemaining int,
     zoneBasic varchar(64),
     zoneName varchar(32),
-    zoneSlug varchar(4),
     zoneRange varchar(32),
     locationX int,
     locationY int,
@@ -61,6 +67,10 @@ CREATE TABLE Shots(
     isShotMade int,
     PRIMARY KEY (gameID, teamID, playerID, eventID),
     FOREIGN KEY (teamID) REFERENCES Teams(teamID),
-    FOREIGN KEY (playerID) REFERENCES Players(playerID)
+    FOREIGN KEY (playerID) REFERENCES Players(playerID),
+    FOREIGN KEY (gameID) REFERENCES Games(gameID)
 );
+
+DROP TABLE Shots;
+
 
