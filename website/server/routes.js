@@ -353,6 +353,81 @@ async function getIdealShotDistribution(req, res) {
     })
 }
 
+// Route 13 
+// - Query Players table for Player information
+async function getPlayerInfo(req, res) {
+    const name = req.query.name ? req.query.name : "Zach Lavine"
+
+    connection.query(`SELECT name, playerID, firstSeason, playerStatsURL, playerHeadshotURL FROM Players WHERE name = ${name} LIMIT 1;`, function(error, results, fields) {
+        if (error) {
+            console.log(error);
+            res.json({ error: error });
+        } else if (results) {
+            res.json({ results: results });
+        }
+    })
+}
+
+// Route 14
+// Query to get shot performance per zone per season for player
+async function getPlayerInfo(req, res) {
+    const name = req.query.name ? req.query.name : "Zach Lavine"
+
+    connection.query(`WITH player_id AS (SELECT playerID FROM Players WHERE name = ${name} LIMIT 1)
+    SELECT playerID, slugSeason,
+           SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Center' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Center' THEN isShotAttempted ELSE 0 END) as center_three,
+    
+           SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Left Side Center' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Left Side Center' THEN isShotAttempted ELSE 0 END) as lWing_three,
+    
+           SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Right Side Center' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Right Side Center' THEN isShotAttempted ELSE 0 END) as rWing_three,
+    
+           SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Center' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Center' THEN isShotAttempted ELSE 0 END) as center_paint,
+    
+           SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Left Side' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Left Side' THEN isShotAttempted ELSE 0 END) as left_paint,
+    
+           SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Right Side' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Right Side' THEN isShotAttempted ELSE 0 END) as right_paint,
+    
+           SUM(CASE WHEN zoneName = 'Center' AND zoneBasic = 'Restricted Area' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneName = 'Center' AND zoneBasic = 'Restricted Area' THEN isShotAttempted ELSE 0 END) as restricedArea,
+    
+           SUM(CASE WHEN zoneBasic = 'Right Corner 3' AND zoneName = 'Right Side' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Right Corner 3' AND zoneName = 'Right Side' THEN isShotAttempted ELSE 0 END) as rCorner_three,
+    
+           SUM(CASE WHEN zoneBasic = 'Left Corner 3' AND zoneName = 'Left Side' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Left Corner 3' AND zoneName = 'Left Side' THEN isShotAttempted ELSE 0 END) as lCorner_three,
+    
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Left Side' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Left Side' THEN isShotAttempted ELSE 0 END) as lCorner_mid,
+    
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Left Side Center' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Left Side Center' THEN isShotAttempted ELSE 0 END) as lWing_mid,
+    
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Right Side Center' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Right Side Center' THEN isShotAttempted ELSE 0 END) as rWing_mid,
+    
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Right Side' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Right Side' THEN isShotAttempted ELSE 0 END) as rCorner_mid,
+    
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Center' THEN isShotMade ELSE 0 END)/
+           SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Center' THEN isShotAttempted ELSE 0 END) as center_mid
+    FROM Shots
+    WHERE playerID = (SELECT * FROM player_id)
+    GROUP BY playerID, slugSeason;`, function(error, results, fields) {
+        if (error) {
+            console.log(error);
+            res.json({ error: error });
+        } else if (results) {
+            res.json({ results: results });
+        }
+    })
+}
+
 module.exports = {
     hello,
     getAllShotsOfPlayer,

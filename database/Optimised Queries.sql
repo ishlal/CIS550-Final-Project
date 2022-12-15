@@ -141,6 +141,8 @@ SELECT gs.teamID as teamID, gs.gameID as gameID, Teams.name as name, gs.luck_ind
                 GROUP BY teamID, gameID) gs LEFT JOIN Teams ON gs.teamID = Teams.teamID
         ORDER BY luck_index desc;
 
+
+# optimal shot distribution query
 WITH player_id AS (SELECT playerID FROM Players WHERE name = 'Zach Lavine' LIMIT 1), player_shots AS (SELECT playerID, zoneRange, zoneBasic, SUM(isShotAttempted) as attempts, AVG(isShotMade) as make_percentage
     FROM Shots
     WHERE playerID = (SELECT * FROM player_id)
@@ -157,3 +159,62 @@ WITH player_id AS (SELECT playerID FROM Players WHERE name = 'Zach Lavine' LIMIT
         GROUP BY playerID)
     SELECT s.playerID, p.name, zoneRange, zoneBasic, attempts, make_percentage, take_percentage, expected_points/(SELECT * FROM total_expected) opt_take_percentage
     FROM shot_distribution s LEFT JOIN Players p on s.playerID = p.playerID
+
+
+# query player table for information
+SELECT name, playerID, firstSeason, playerStatsURL, playerHeadshotURL FROM Players WHERE name = 'Zach Lavine' LIMIT 1;
+
+
+# get shot performance for by player for season
+SELECT playerID, slugSeason, zoneName,  zoneBasic, AVG(isShotMade) as make_percentage
+FROM Shots
+WHERE playerID = 203897
+GROUP BY playerID, zoneName, zoneBasic, slugSeason;
+
+WITH player_id AS (SELECT playerID FROM Players WHERE name = 'Zach Lavine' LIMIT 1)
+SELECT playerID, slugSeason,
+       SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Center' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Center' THEN isShotAttempted ELSE 0 END) as center_three,
+
+       SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Left Side Center' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Left Side Center' THEN isShotAttempted ELSE 0 END) as lWing_three,
+
+       SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Right Side Center' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Above the Break 3' AND zoneName = 'Right Side Center' THEN isShotAttempted ELSE 0 END) as rWing_three,
+
+       SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Center' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Center' THEN isShotAttempted ELSE 0 END) as center_paint,
+
+       SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Left Side' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Left Side' THEN isShotAttempted ELSE 0 END) as left_paint,
+
+       SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Right Side' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Right Side' THEN isShotAttempted ELSE 0 END) as right_paint,
+
+       SUM(CASE WHEN zoneName = 'Center' AND zoneBasic = 'Restricted Area' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneName = 'Center' AND zoneBasic = 'Restricted Area' THEN isShotAttempted ELSE 0 END) as restricedArea,
+
+       SUM(CASE WHEN zoneBasic = 'Right Corner 3' AND zoneName = 'Right Side' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Right Corner 3' AND zoneName = 'Right Side' THEN isShotAttempted ELSE 0 END) as rCorner_three,
+
+       SUM(CASE WHEN zoneBasic = 'Left Corner 3' AND zoneName = 'Left Side' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Left Corner 3' AND zoneName = 'Left Side' THEN isShotAttempted ELSE 0 END) as lCorner_three,
+
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Left Side' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Left Side' THEN isShotAttempted ELSE 0 END) as lCorner_mid,
+
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Left Side Center' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Left Side Center' THEN isShotAttempted ELSE 0 END) as lWing_mid,
+
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Right Side Center' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Right Side Center' THEN isShotAttempted ELSE 0 END) as rWing_mid,
+
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Right Side' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Right Side' THEN isShotAttempted ELSE 0 END) as rCorner_mid,
+
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Center' THEN isShotMade ELSE 0 END)/
+       SUM(CASE WHEN zoneBasic = 'Mid-Range' AND zoneName = 'Center' THEN isShotAttempted ELSE 0 END) as center_mid
+FROM Shots
+WHERE playerID = (SELECT * FROM player_id)
+GROUP BY playerID, slugSeason
+ORDER BY slugSeason desc;
