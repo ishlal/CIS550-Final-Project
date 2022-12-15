@@ -12,6 +12,7 @@ function LuckPage(props) {
             dataIndex: 'name',
             key: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name),
+            render: (name) => <a href={`/teams/${name}`}>{name}</a>
         },
         {
             title: 'Luck Index',
@@ -45,7 +46,7 @@ function LuckPage(props) {
                     columns={tableColumns} 
                     pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }} 
                     style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}
-                    rowKey="teamID"
+                    rowKey="Id"
                 />
             }
         </div>

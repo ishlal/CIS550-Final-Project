@@ -78,8 +78,40 @@ const getIdealShotDistribution = async (name) => {
     return res.json()
 }
 
+const getPlayerInfo = async (name) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/player?name=${name}`, {
+        method: 'GET'
+    })
+    return res.json();
+}
 
+const getPlayerShotPerformances = async (name) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/player/shots?name=${name}`, {
+        method: 'GET'
+    })
+    return res.json();
+}
 
+const getLuckiestPerformancesForPlayer = async (name, min) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/player/luck?name=${name}&minAttempts=${min}`, {
+        method: 'GET'
+    })
+    return res.json();
+}
+
+const getClutchestPerformancesForPlayer = async (name, min) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/player/clutch?name=${name}&minAttempts=${min}`, {
+        method: 'GET'
+    })
+    return res.json();
+}
+
+const getTeamInfo = async (name) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/team?name=${name}`, {
+        method: 'GET'
+    })
+    return res.json();
+}
 
 
 
@@ -95,5 +127,10 @@ export {
     getClutchPlayers,
     getLuckyPerformances,
     getLuckiestPlayerPerformances,
-    getIdealShotDistribution
+    getIdealShotDistribution,
+    getPlayerInfo,
+    getPlayerShotPerformances,
+    getLuckiestPerformancesForPlayer,
+    getClutchestPerformancesForPlayer,
+    getTeamInfo
 }

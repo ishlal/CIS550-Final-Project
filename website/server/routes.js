@@ -53,7 +53,7 @@ async function getAllShotsOfPlayer(req, res) {
     }
 }
 
-/*
+
 // Route 3
 // get all shots of a single player during one specified game (timeframe optional)
 async function getGameShotsOfPlayer(req, res) {
@@ -79,9 +79,9 @@ async function getGameShotsOfPlayer(req, res) {
         }
     })
 }
-*/
 
-/* 
+
+
 // Route 4
 //get all shots of a team during one specified game (timeframe optional) 
 async function getGameShotsOfTeam(req, res) {
@@ -105,9 +105,9 @@ async function getGameShotsOfTeam(req, res) {
         }
     })
 }
-*/
 
-/*
+
+
 // Route 5
 // get shot locations of a single player during one game
 async function getShotLocationsOfPlayer(req, res) {
@@ -126,9 +126,9 @@ async function getShotLocationsOfPlayer(req, res) {
         }
       })
 }
-*/
 
-/*
+
+
 // Route 6
 // get all made shots within last x seconds of a quarter
 async function getClutchShotsOfPlayer(req, res) {
@@ -153,9 +153,9 @@ async function getClutchShotsOfPlayer(req, res) {
         }
     })
 }
-*/
 
-/*
+
+
 // Route 7
 // get all shots of player over a season 
 async function getSeasonShotsOfPlayer(req, res) {
@@ -178,9 +178,9 @@ async function getSeasonShotsOfPlayer(req, res) {
         }
     })
 }
-*/
 
-/*
+
+
 // Route 8
 // get distribution of player's shot locations 
 // Query to get optimal shot distribution for player 
@@ -219,7 +219,7 @@ async function getShotDistribution(req, res) {
         }
     })
 }
-*/
+
 
 // Route 9
 // Get most clutch players by z-score of their clutch performance (with min # of attempts)
@@ -409,7 +409,7 @@ async function getPlayerShotPerformances(req, res) {
            SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Right Side' THEN isShotAttempted ELSE 0 END) as right_paint,
 
            SUM(CASE WHEN zoneName = 'Center' AND zoneBasic = 'Restricted Area' THEN isShotMade ELSE 0 END)/
-           SUM(CASE WHEN zoneName = 'Center' AND zoneBasic = 'Restricted Area' THEN isShotAttempted ELSE 0 END) as restricedArea,
+           SUM(CASE WHEN zoneName = 'Center' AND zoneBasic = 'Restricted Area' THEN isShotAttempted ELSE 0 END) as restrictedArea,
 
            SUM(CASE WHEN zoneBasic = 'Right Corner 3' AND zoneName = 'Right Side' THEN isShotMade ELSE 0 END)/
            SUM(CASE WHEN zoneBasic = 'Right Corner 3' AND zoneName = 'Right Side' THEN isShotAttempted ELSE 0 END) as rCorner_three,
@@ -548,7 +548,7 @@ async function getLuckiestPerformancesForPlayer(req, res) {
     const minAttempts = req.query.minAttempts ? req.query.minAttempts : 8
 
 
-    connection.query(`WITH player_id AS (SELECT playerID from Players WHERE name = '${name}')
+    connection.query(`WITH player_id AS (SELECT playerID from Players WHERE name = '${name}' LIMIT 1)
     SELECT gs.playerID as playerID, gs.gameID as gameID, date as date, slugMatchup as Matchup, Players.name as name, gs.luck_index as luck_index, attempts
         FROM (SELECT playerID, gameID,  AVG(z_score) luck_index, SUM(attempts) as attempts
             FROM (SELECT playerID, gameID, zoneName, zoneBasic, zoneRange, (player_avg - pop_average)/player_std as z_score, attempts
@@ -572,7 +572,7 @@ async function getLuckiestPerformancesForPlayer(req, res) {
 
 // Route 19
 // Query to get luckiness index information for team 
-async function getLuckiestPerformancesForPlayer(req, res) {
+async function getLuckiestPerformancesForTeam(req, res) {
     const name = req.query.name ? req.query.name : "Atlanta Hawks"
 
     connection.query(`WITH team_id AS (SELECT teamID from Teams WHERE name = '${name}')
@@ -646,7 +646,7 @@ async function getShotsPlayerGame(req, res) {
 
 // Route 22
 // Query to get list of most clutch games for player
-async function getShotsPlayerGame(req, res) {
+async function getClutchestPerformancesForPlayer(req, res) {
     const name = req.query.name ? req.query.name : "Seth Curry"
     const minAttempts = req.query.minAttempts ? req.query.minAttempts : 3
 
@@ -685,5 +685,10 @@ module.exports = {
     getClutchPlayers,
     getLuckyPerformances,
     getLuckiestPlayerPerformances,
-    getIdealShotDistribution
+    getIdealShotDistribution,
+    getPlayerInfo,
+    getPlayerShotPerformances,
+    getTeamInfo,
+    getLuckiestPerformancesForPlayer,
+    getClutchestPerformancesForPlayer
 }

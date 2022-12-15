@@ -1,14 +1,15 @@
 import React, {useRef, useEffect} from 'react';
 
 import MenuBar from '../components/MenuBar';
-
+import {useHistory} from 'react-router-dom';
 
 function TeamsPage(props) {
     const teamRef = useRef();
+    const history = useHistory();
 
     const onSubmit = (e) => {
-        console.log(teamRef.current.value);
         e.preventDefault();
+        history.push(`/teams/${teamRef.current.value}`);
     }
 
     return (

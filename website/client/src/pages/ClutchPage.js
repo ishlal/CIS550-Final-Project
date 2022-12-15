@@ -13,6 +13,7 @@ function ClutchPage(props) {
             dataIndex: 'name',
             key: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name),
+            render: (name) => <a href={`/players/${name}`}>{name}</a>
         },
         {
             title: 'Clutch Index',
