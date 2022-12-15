@@ -140,3 +140,20 @@ SELECT gs.teamID as teamID, gs.gameID as gameID, Teams.name as name, gs.luck_ind
                     ) team_zones) team_scores
                 GROUP BY teamID, gameID) gs LEFT JOIN Teams ON gs.teamID = Teams.teamID
         ORDER BY luck_index desc;
+
+WITH player_id AS (SELECT playerID FROM Players WHERE name = 'Zach Lavine' LIMIT 1), player_shots AS (SELECT playerID, zoneRange, zoneBasic, SUM(isShotAttempted) as attempts, AVG(isShotMade) as make_percentage
+    FROM Shots
+    WHERE playerID = (SELECT * FROM player_id)
+    GROUP BY playerID, zoneRange, zoneBasic
+    ORDER BY attempts desc),
+    total_attempts AS (SELECT SUM(attempts)
+            FROM player_shots
+            GROUP BY playerID),
+    shot_distribution AS (SELECT playerID, zoneRange, zoneBasic, attempts, make_percentage, attempts/(SELECT * FROM total_attempts) take_percentage,
+                    IF(zoneRange in ('24+ ft.', 'Back Court Shot'), 3 * make_percentage, 2 * make_percentage) expected_points
+                FROM player_shots),
+    total_expected AS (SELECT SUM(expected_points)
+        FROM shot_distribution
+        GROUP BY playerID)
+    SELECT s.playerID, p.name, zoneRange, zoneBasic, attempts, make_percentage, take_percentage, expected_points/(SELECT * FROM total_expected) opt_take_percentage
+    FROM shot_distribution s LEFT JOIN Players p on s.playerID = p.playerID

@@ -328,9 +328,9 @@ async function getLuckiestPlayerPerformances(req, res) {
 async function getIdealShotDistribution(req, res) {
     const name = req.query.name ? req.query.name : "Zach Lavine"
 
-    connection.query(`WITH player_shots AS (SELECT playerID, zoneRange, zoneBasic, SUM(isShotAttempted) as attempts, AVG(isShotMade) as make_percentage
+    connection.query(`WITH player_id AS (SELECT playerID FROM Players WHERE name = ${name} LIMIT 1), player_shots AS (SELECT playerID, zoneRange, zoneBasic, SUM(isShotAttempted) as attempts, AVG(isShotMade) as make_percentage
     FROM Shots
-    WHERE namePlayer = '${name}'
+    WHERE playerID = (SELECT * FROM player_id)
     GROUP BY playerID, zoneRange, zoneBasic
     ORDER BY attempts desc),
     total_attempts AS (SELECT SUM(attempts)
