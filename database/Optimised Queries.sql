@@ -40,6 +40,36 @@ SELECT player_clutch.playerID as playerID, Players.name as name, player_clutch.c
     ORDER BY clutch_score desc;
 
 
+# clutch players game
+SELECT player_clutch.playerID as playerID, player_clutch.gameID as gameID, Players.name as name, player_clutch.clutch_score as clutch_score, attempts
+    FROM (SELECT playerID, gameID, AVG(z_score) clutch_score, SUM(attempts) as attempts
+        FROM(SELECT playerID, gameID, zoneBasic, zoneRange, (player_avg - pop_average)/player_std as z_score, attempts
+            FROM (
+                SELECT playerID, gameID, p.zoneName as zoneName, p.zoneRange as zoneRange, p.zoneBasic as zoneBasic, p.average as player_avg,
+                attempts, h.average as pop_average, std as pop_std, std/SQRT(attempts) as player_std
+                FROM Player_Averages_Clutch_Game p LEFT JOIN Historical_Averages h ON
+                    p.zoneRange = h.zoneRange AND p.zoneName = h.zoneName AND p.zoneBasic = h.zoneBasic
+                ) player_zones) player_scores
+            GROUP BY playerID, gameID
+            HAVING SUM(attempts) >= 3) player_clutch LEFT JOIN Players ON player_clutch.playerID = Players.playerID
+    ORDER BY clutch_score desc;
+
+# clutch players game
+SELECT player_clutch.playerID as playerID, player_clutch.gameID as gameID, Players.name as name, player_clutch.clutch_score as clutch_score, attempts
+    FROM (SELECT playerID, gameID, AVG(z_score) clutch_score, SUM(attempts) as attempts
+        FROM(SELECT playerID, gameID, zoneBasic, zoneRange, (player_avg - pop_average)/player_std as z_score, attempts
+            FROM (
+                SELECT playerID, gameID, p.zoneName as zoneName, p.zoneRange as zoneRange, p.zoneBasic as zoneBasic, p.average as player_avg,
+                attempts, h.average as pop_average, std as pop_std, std/SQRT(attempts) as player_std
+                FROM Player_Averages_Clutch_Game p LEFT JOIN Historical_Averages h ON
+                    p.zoneRange = h.zoneRange AND p.zoneName = h.zoneName AND p.zoneBasic = h.zoneBasic
+                ) player_zones) player_scores
+            GROUP BY playerID, gameID
+            HAVING SUM(attempts) >= 3) player_clutch LEFT JOIN Players ON player_clutch.playerID = Players.playerID
+    WHERE name = 'Seth Curry'
+    ORDER BY clutch_score desc;
+
+
 # Optimised Query Two 1s 562 ms
     SELECT gs.teamID as teamID, gs.gameID as gameID, Teams.name as name, gs.luck_index as luck_index, attempts
         FROM (SELECT teamID, gameID, AVG(z_score) luck_index, SUM(attempts) as attempts
@@ -93,6 +123,20 @@ SELECT gs.playerID as playerID, gs.gameID as gameID, Players.name as name, gs.lu
                 ) team_zones) player_scores
             GROUP BY playerID, gameID) gs LEFT JOIN Players ON gs.playerID = Players.playerID
     WHERE attempts >= 8
+    ORDER BY luck_index desc;
+
+
+WITH team_id AS (SELECT teamID from Teams WHERE name = 'Atlanta Hawks')
+SELECT gs.teamID as teamID, gs.gameID as gameID, Teams.name as name, gs.luck_index as luck_index, attempts
+    FROM (SELECT teamID, gameID, AVG(z_score) luck_index, SUM(attempts) as attempts
+        FROM (SELECT teamID, gameID, zoneName, zoneBasic, zoneRange, (player_avg - pop_average)/player_std as z_score, attempts
+            FROM (
+                SELECT teamID, gameID, p.zoneName as zoneName, p.zoneRange as zoneRange, p.zoneBasic as zoneBasic, p.average as player_avg,
+                    attempts, h.average as pop_average, std as pop_std, std/SQRT(attempts) as player_std
+                FROM (SELECT * FROM Game_Averages_Team WHERE teamID = (SELECT * FROM team_id)) p  LEFT JOIN Historical_Averages h ON
+                        p.zoneRange = h.zoneRange AND p.zoneName = h.zoneName AND p.zoneBasic = h.zoneBasic
+                ) team_zones) player_scores
+            GROUP BY teamID, gameID) gs LEFT JOIN Teams ON gs.teamID = Teams.teamID
     ORDER BY luck_index desc;
 
 

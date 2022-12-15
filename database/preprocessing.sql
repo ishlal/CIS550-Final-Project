@@ -19,6 +19,13 @@ CREATE TABLE Player_Averages_Clutch AS (SELECT playerID, zoneName, zoneRange, zo
                              WHERE quarter = 4 AND minRemaining <= 5 # could add more restrictions here to subset even more
                              GROUP BY zoneName, zoneRange, zoneBasic, playerID) as wanted_games);
 
+CREATE TABLE Player_Averages_Clutch_Game AS (SELECT playerID,gameID, zoneName, zoneRange, zoneBasic, average, attempts
+                       FROM (SELECT playerID, gameID, zoneName, zoneRange, zoneBasic, SUM(isShotAttempted) as attempts, AVG(isShotMade) as average
+                             FROM Shots
+                             WHERE quarter = 4 AND minRemaining <= 5 # could add more restrictions here to subset even more
+                             GROUP BY zoneName, zoneRange, zoneBasic, playerID, gameID) as wanted_games);
+
+
 CREATE TABLE Game_Averages_Player AS (SELECT playerID, gameID, zoneName, zoneRange, zoneBasic, slugSeason, average, attempts
                        FROM (SELECT playerID, gameID, zoneName, zoneRange, zoneBasic, slugSeason, SUM(isShotAttempted) as attempts, AVG(isShotMade) as average
                              FROM Shots
