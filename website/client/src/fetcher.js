@@ -113,8 +113,19 @@ const getTeamInfo = async (name) => {
     return res.json();
 }
 
+const getTeamShotPerformances = async (name) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/team/shots?name=${name}`, {
+        method: 'GET'
+    })
+    return res.json();
+}
 
-
+const getLuckiestPerformancesForTeam = async (name) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/team/luck?name=${name}`, {
+        method: 'GET'
+    })
+    return res.json();
+}
 
 export {
     getAllShotsOfPlayer,
@@ -132,5 +143,7 @@ export {
     getPlayerShotPerformances,
     getLuckiestPerformancesForPlayer,
     getClutchestPerformancesForPlayer,
-    getTeamInfo
+    getTeamInfo,
+    getTeamShotPerformances,
+    getLuckiestPerformancesForTeam
 }

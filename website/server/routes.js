@@ -470,7 +470,7 @@ async function getTeamShotPerformances(req, res) {
            SUM(CASE WHEN zoneBasic = 'In The Paint (Non-RA)' AND zoneName = 'Right Side' THEN isShotAttempted ELSE 0 END) as right_paint,
 
            SUM(CASE WHEN zoneName = 'Center' AND zoneBasic = 'Restricted Area' THEN isShotMade ELSE 0 END)/
-           SUM(CASE WHEN zoneName = 'Center' AND zoneBasic = 'Restricted Area' THEN isShotAttempted ELSE 0 END) as restricedArea,
+           SUM(CASE WHEN zoneName = 'Center' AND zoneBasic = 'Restricted Area' THEN isShotAttempted ELSE 0 END) as restrictedArea,
 
            SUM(CASE WHEN zoneBasic = 'Right Corner 3' AND zoneName = 'Right Side' THEN isShotMade ELSE 0 END)/
            SUM(CASE WHEN zoneBasic = 'Right Corner 3' AND zoneName = 'Right Side' THEN isShotAttempted ELSE 0 END) as rCorner_three,
@@ -576,7 +576,7 @@ async function getLuckiestPerformancesForTeam(req, res) {
     const name = req.query.name ? req.query.name : "Atlanta Hawks"
 
     connection.query(`WITH team_id AS (SELECT teamID from Teams WHERE name = '${name}')
-    SELECT gs.teamID as teamID, gs.gameID as gameID, date as date, slugMatchup as matchup, Teams.name as name, gs.luck_index as luck_index, attempts
+    SELECT gs.teamID as teamID, gs.gameID as gameID, date as date, slugMatchup as Matchup, Teams.name as name, gs.luck_index as luck_index, attempts
         FROM (SELECT teamID, gameID, AVG(z_score) luck_index, SUM(attempts) as attempts
             FROM (SELECT teamID, gameID, zoneName, zoneBasic, zoneRange, (player_avg - pop_average)/player_std as z_score, attempts
                 FROM (
@@ -689,6 +689,8 @@ module.exports = {
     getPlayerInfo,
     getPlayerShotPerformances,
     getTeamInfo,
+    getTeamShotPerformances,
     getLuckiestPerformancesForPlayer,
+    getLuckiestPerformancesForTeam,
     getClutchestPerformancesForPlayer
 }

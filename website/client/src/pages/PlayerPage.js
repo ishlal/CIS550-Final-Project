@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import MenuBar from '../components/MenuBar';
 import { getPlayerInfo, getPlayerShotPerformances, getIdealShotDistribution, getLuckiestPerformancesForPlayer, getClutchestPerformancesForPlayer } from '../fetcher';
-import { shotDistributionColumns, shotTableColumns, luckColumns, clutchColumns } from './tableColumns';
+import { shotDistributionColumns, shotTableColumns, luckColumns, clutchColumns } from './Columns';
 
 import {Table} from 'antd';
 function PlayerPage(props) {
@@ -29,7 +29,6 @@ function PlayerPage(props) {
             setLuck(res.results)
         });
         getClutchestPerformancesForPlayer(player_name, 0).then(res => {
-            console.log(res);
             setClutch(res.results)
         })
     }, [])
