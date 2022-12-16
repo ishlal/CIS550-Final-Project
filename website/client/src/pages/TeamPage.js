@@ -15,15 +15,15 @@ function TeamPage(props) {
 
     const specificGameColumns = [
         {
-            title: 'Quarter',
-            dataIndex:'quarter',
-            key:'quarter'
-        },
-        {
             title: 'Player',
             dataIndex: 'namePlayer',
             key: 'namePlayer',
             render: (name) => <a href={`/players/${name}`}>{name}</a>
+        },
+        {
+            title: 'Quarter',
+            dataIndex:'quarter',
+            key:'quarter'
         },
         {
             title: 'Minutes Remaining',
@@ -111,7 +111,7 @@ function TeamPage(props) {
         <div>
             <MenuBar/>
             {Object.keys(teamInfo).length > 0 && 
-                <div>
+                <div className="text-center mt-5">
                     <h1>{teamInfo.name}</h1>
                     <h2>City: {teamInfo.city}</h2>
                     <h2>Championships: {teamInfo.championships}</h2>
@@ -121,36 +121,36 @@ function TeamPage(props) {
                 </div>
             }
             {Object.keys(teamShots).length > 0 && 
-                <div>
+                <div className="text-center mt-5">
                     <h2>Shot Distribution</h2>
                     <Table 
                         dataSource={teamShots} 
                         columns={shotTableColumns} 
                         pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }} 
-                        style={{ width: '70vw' }}
+                        className="ml-5 mr-5"
                         rowKey="slugSeason"
                     />
                 </div>
             }
             {Object.keys(luck).length > 0 &&
-                <div>
+                <div className="text-center mt-5">
                     <h2>Luckiest Performances</h2>
                     <Table 
                         dataSource={luck} 
                         columns={luckColumns} 
-                        style={{ width: '70vw' }}
+                        className="ml-5 mr-5"
                         rowKey="Id"
                     />
                 </div>
             }
             {
                 Object.keys(specificGame).length > 0 &&
-                <div>
+                <div className="text-center mt-5">
                     <h2>Shots Taken During {specificGame[0].matchup} ({specificGame[0].date})</h2>
                     <Table
                         dataSource={specificGame}
                         columns={specificGameColumns}
-                        style={{ width: '70vw'}}
+                        className="ml-5 mr-5"
                         rowKey="Id"
                     />
                 </div>

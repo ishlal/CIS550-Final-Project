@@ -15,11 +15,13 @@ function TeamsPage(props) {
     return (
         <div>
             <MenuBar />
-            <h1>Teams Page!</h1>
-            <form onSubmit={onSubmit}>
-                <input type="text" ref={teamRef}/>
-                <input type="submit" value="Search!"/>
-            </form>
+            <div className="text-center mt-5">
+                <h1>Teams Page!</h1>
+                <form onSubmit={onSubmit}>
+                    <input type="text" ref={teamRef}/>
+                    <input type="submit" value="Search!"/>
+                </form>
+            </div>
         </div>
     )
 }

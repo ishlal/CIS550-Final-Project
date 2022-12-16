@@ -9,7 +9,8 @@ import {
 
 function MenuBar(props) {
   return(
-    <Navbar type="dark" theme="primary" expand="md">
+    <Navbar type="dark" theme="dark" expand="md">
+    <icon />
     <NavbarBrand href="/">NBA Database</NavbarBrand>
     <Nav navbar>
       <NavItem>

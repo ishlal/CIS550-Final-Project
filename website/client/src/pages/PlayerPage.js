@@ -148,7 +148,7 @@ function PlayerPage(props) {
         <div>
             <MenuBar/>
             {Object.keys(playerInfo).length > 0 &&
-            <div>
+            <div className="text-center mt-5">
                 <img src={playerInfo[0].playerHeadshotURL}/>
                 <h1>{playerInfo[0].name}</h1>
                 <h2>First Season: {playerInfo[0].firstSeason}</h2>
@@ -156,58 +156,58 @@ function PlayerPage(props) {
             </div>
             }
             {Object.keys(playerShots).length > 0 && 
-                <div>
+                <div className="text-center mt-5">
                     <h2>Shot Distribution</h2>
                     <Table 
                         dataSource={playerShots} 
                         columns={shotTableColumns} 
                         pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }} 
-                        style={{ width: '70vw' }}
+                        className="ml-5 mr-5"
                         rowKey="slugSeason"
                     />
                 </div>
             }
             {Object.keys(idealShots).length > 0 &&
-                <div>
+                <div className="text-center mt-5">
                     <h2>Ideal Shot Distribution</h2>
                     <Table 
                         dataSource={idealShots} 
                         columns={shotDistributionColumns} 
-                        style={{ width: '70vw' }}
+                        className="ml-5 mr-5"
                         rowKey="Id"
                     />
                 </div>
             }
             {Object.keys(luck).length > 0 &&
-                <div>
+                <div className="text-center mt-5">
                     <h2>Luckiest Performances</h2>
                     <Table 
                         dataSource={luck} 
                         columns={luckColumns} 
-                        style={{ width: '70vw' }}
+                        className="ml-5 mr-5"
                         rowKey="Id"
                     />
                 </div>
             }
             {Object.keys(clutch).length > 0 &&
-                <div>
+                <div className="text-center mt-5">
                     <h2>Most Clutch Performances</h2>
                     <Table 
                         dataSource={clutch} 
                         columns={clutchColumns} 
-                        style={{ width: '70vw' }}
+                        className="ml-5 mr-5"
                         rowKey="Id"
                     />
                 </div>
             }
             {
                 Object.keys(specificGame).length > 0 &&
-                <div>
+                <div className="text-center mt-5">
                     <h2>Shots Taken During {specificGame[0].matchup} ({specificGame[0].date})</h2>
                     <Table
                         dataSource={specificGame}
                         columns={specificGameColumns}
-                        style={{ width: '70vw'}}
+                        className="ml-5 mr-5"
                         rowKey="Id"
                     />
                 </div>

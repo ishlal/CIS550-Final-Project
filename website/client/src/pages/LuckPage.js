@@ -48,17 +48,19 @@ function LuckPage(props) {
     return (
         <div>
             <MenuBar/>
-            <h1>Luck Page!</h1>
-    
-            {Object.keys(luck).length > 0 &&
-                <Table 
-                    dataSource={luck} 
-                    columns={tableColumns} 
-                    pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }} 
-                    style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}
-                    rowKey="Id"
-                />
-            }
+            <div className="text-center mt-5 mb-5">
+                <h1>Luck Page!</h1>
+        
+                {Object.keys(luck).length > 0 &&
+                    <Table 
+                        dataSource={luck} 
+                        columns={tableColumns} 
+                        pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }} 
+                        style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}
+                        rowKey="Id"
+                    />
+                }
+            </div>
         </div>
     )
 }

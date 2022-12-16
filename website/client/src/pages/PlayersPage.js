@@ -15,7 +15,7 @@ function PlayersPage(props) {
     return (
         <div>
             <MenuBar/>
-            <div>
+            <div className="text-center mt-5">
                 <h1>Players Page!</h1>
                 <form onSubmit={onSubmit}>
                     <input type="text" ref={playerRef}/>

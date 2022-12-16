@@ -13,7 +13,7 @@ const shotTableColumns = [
 
     },
     {
-        title: 'Center Paint Percentage',
+        title: 'Paint Percentage',
         dataIndex: 'center_paint',
         key: 'center_paint',
         sorter: (a, b) => a.center_paint - b.center_paint
@@ -23,12 +23,6 @@ const shotTableColumns = [
         dataIndex: 'center_three',
         key: 'center_three',
         sorter: (a, b) => a.center_three - b.center_three
-    },
-    {
-        title: 'Left Corner Midrange Percentage',
-        dataIndex: 'lCorner_mid',
-        key: 'lCorner_mid',
-        sorter: (a, b) => a.lCorner_mid - b.lCorner_mid
     },
     {
         title: 'Left Corner Three Percentage',
@@ -47,18 +41,6 @@ const shotTableColumns = [
         dataIndex: 'lWing_three',
         key: 'lWing_three',
         sorter: (a, b) => a.lWing_three - b.lWing_three
-    },
-    {
-        title: 'Left Paint Percentage',
-        dataIndex: 'left_paint',
-        key: 'left_paint',
-        sorter: (a, b) => a.left_paint - b.left_paint
-    },
-    {
-        title: 'Right Corner Midrange Percentage',
-        dataIndex: 'rCorner_mid',
-        key: 'rCorner_mid',
-        sorter: (a, b) => a.rCorner_mid - b.rCorner_mid
     },
     {
         title: 'Right Corner Three Percentage',
@@ -83,12 +65,6 @@ const shotTableColumns = [
         dataIndex: 'restrictedArea',
         key: 'restrictedArea',
         sorter: (a, b) => a.restrictedArea - b.restrictedArea
-    },
-    {
-        title: 'Right Paint Percentage',
-        dataIndex: 'right_paint',
-        key: 'right_paint',
-        sorter: (a, b) => a.right_paint - b.right_paint
     }
 ]
 

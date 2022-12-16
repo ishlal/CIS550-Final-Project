@@ -78,29 +78,34 @@ function ClutchPage(props) {
     return (
         <div>
             <MenuBar/>
-            <h1>Clutch Page!</h1>
-    
-            {Object.keys(clutch).length > 0 &&
-                <Table 
-                    dataSource={clutch} 
-                    columns={tableColumns} 
-                    pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }} 
-                    style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}
-                    rowKey="playerID"
-                />
-            }
-            {Object.keys(clutchGames).length > 0 &&
-                <div>
-                    <h1>Most Clutch Single Game Performances</h1>
-                    <Table 
-                        dataSource={clutchGames} 
-                        columns={clutchGameColumns} 
-                        pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }} 
-                        style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}
-                        rowKey="Id"
-                    />
-                </div>
-            }
+            <div className="text-center mt-5">
+                <h1>Clutch Page!</h1>
+        
+                {Object.keys(clutch).length > 0 &&
+                    <div className="text-center mt-5">
+                        <h1>Most Clutch Players</h1>
+                        <Table 
+                            dataSource={clutch} 
+                            columns={tableColumns} 
+                            pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }} 
+                            style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}
+                            rowKey="playerID"
+                        />
+                    </div>
+                }
+                {Object.keys(clutchGames).length > 0 &&
+                    <div className="text-center mt-5">
+                        <h1>Most Clutch Single Game Performances</h1>
+                        <Table 
+                            dataSource={clutchGames} 
+                            columns={clutchGameColumns} 
+                            pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }} 
+                            style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}
+                            rowKey="Id"
+                        />
+                    </div>
+                }
+            </div>
         </div>
     )
 }

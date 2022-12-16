@@ -8,8 +8,10 @@ function HomePage(props) {
   return (
     <div>
       <MenuBar/>
-      <h1>Welcome to the NBA Database!</h1>
-      <h2>Click on a link to get started!</h2>
+      <div className="text-center mt-5">
+        <h1>Welcome to the NBA Database!</h1>
+        <h2>Click on a link to get started!</h2>
+      </div>
     </div>
   )
 }
