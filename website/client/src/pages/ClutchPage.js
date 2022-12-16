@@ -90,7 +90,7 @@ function ClutchPage(props) {
         
                 {Object.keys(clutch).length > 0 &&
                     <div className="text-center mt-5">
-                        <h1>Most Clutch Players</h1>
+                        <h2>Most Clutch Players</h2>
                         <form onSubmit={clutchOnSubmit}>
                             <label>Minimum Attempts: </label>
                             <input type="number" ref={clutchMinRef}/>
@@ -107,7 +107,7 @@ function ClutchPage(props) {
                 }
                 {Object.keys(clutchGames).length > 0 &&
                     <div className="text-center mt-5">
-                        <h1>Most Clutch Single Game Performances</h1>
+                        <h2>Most Clutch Single Game Performances</h2>
                         <Table 
                             dataSource={clutchGames} 
                             columns={clutchGameColumns} 

@@ -52,13 +52,16 @@ function LuckPage(props) {
                 <h1>Luck Page!</h1>
         
                 {Object.keys(luck).length > 0 &&
-                    <Table 
-                        dataSource={luck} 
-                        columns={tableColumns} 
-                        pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }} 
-                        style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}
-                        rowKey="Id"
-                    />
+                    <div>
+                        <h2>Luckiest Single Game Performances</h2>
+                        <Table 
+                            dataSource={luck} 
+                            columns={tableColumns} 
+                            pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }} 
+                            style={{ width: '70vw', margin: '0 auto', marginTop: '5vh' }}
+                            rowKey="Id"
+                        />
+                    </div>
                 }
             </div>
         </div>
