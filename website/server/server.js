@@ -51,6 +51,8 @@ app.get('/player', routes.getPlayerInfo)
 
 app.get('/player/shots', routes.getPlayerShotPerformances)
 
+app.get('/player/game/shots', routes.getShotsPlayerGame)
+
 app.get('/player/luck', routes.getLuckiestPerformancesForPlayer)
 
 app.get('/player/clutch', routes.getClutchestPerformancesForPlayer)
@@ -60,6 +62,11 @@ app.get('/team', routes.getTeamInfo)
 app.get('/team/shots', routes.getTeamShotPerformances)
 
 app.get('/team/luck', routes.getLuckiestPerformancesForTeam)
+
+app.get('/team/game/shots', routes.getShotsTeamGame)
+
+app.get('/game/clutch', routes.getClutchPlayerGames)
+
 
 app.listen(config.server_port, () => {
     console.log(`Server running at http://${config.server_host}:${config.server_port}/`);

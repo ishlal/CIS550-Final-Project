@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Table } from 'antd';
 
 import MenuBar from '../components/MenuBar';
-import { getLuckyPerformances } from '../fetcher';
+import { getLuckyPerformances, getShotsTeamName } from '../fetcher';
 
 function LuckPage(props) {
     const [luck, setLuck] = useState({});
@@ -13,6 +13,16 @@ function LuckPage(props) {
             key: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name),
             render: (name) => <a href={`/teams/${name}`}>{name}</a>
+        },
+        {
+            title: 'Game',
+            dataIndex: 'matchup',
+            key: 'matchup'
+        },
+        {
+            title: 'Date',
+            dataIndex: 'date',
+            key: 'date'
         },
         {
             title: 'Luck Index',

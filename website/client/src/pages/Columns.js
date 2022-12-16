@@ -131,63 +131,8 @@ const shotDistributionColumns = [
     }
 ]
 
-const luckColumns = [
-    {
-        title: 'Matchup',
-        dataIndex: 'Matchup',
-        key: 'Matchup',
-        sorter: (a, b) => a.Matchup - b.Matchup
-    },
-    {
-        title: 'Date',
-        dataIndex: 'date',
-        key: 'date',
-        sorter: (a, b) => a.date - b.date
-    },
-    {
-        title: 'Attempts',
-        dataIndex: 'attempts',
-        key: 'attempts',
-        sorter: (a, b) => a.attempts - b.attempts
-    },
-    {
-        title: 'Luck Index',
-        dataIndex: 'luck_index',
-        key: 'luck_index',
-        sorter: (a, b) => a.luck_index - b.luck_index
-    }
-]
-
-const clutchColumns = [
-    {
-        title: 'Matchup',
-        dataIndex: 'matchup',
-        key: 'matchup',
-        sorter: (a, b) => a.matchup - b.matchup
-    },
-    {
-        title: 'Date',
-        dataIndex: 'date',
-        key: 'date',
-        sorter: (a, b) => a.date - b.date
-    },
-    {
-        title: 'Attempts',
-        dataIndex: 'attempts',
-        key: 'attempts',
-        sorter: (a, b) => a.attempts - b.attempts
-    },
-    {
-        title: 'Clutch Score',
-        dataIndex: 'clutch_score',
-        key: 'clutch_score',
-        sorter: (a, b) => a.clutch_score - b.clutch_score
-    }
-]
 
 export {
     shotTableColumns,
-    shotDistributionColumns,
-    luckColumns,
-    clutchColumns
+    shotDistributionColumns
 }

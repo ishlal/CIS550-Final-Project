@@ -2,14 +2,98 @@ import React, {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 
 import MenuBar from '../components/MenuBar';
-import { getTeamInfo, getTeamShotPerformances, getLuckiestPerformancesForTeam } from '../fetcher';
-import { shotTableColumns, luckColumns } from './Columns';
+import { getTeamInfo, getTeamShotPerformances, getLuckiestPerformancesForTeam, getShotsTeamGame } from '../fetcher';
+import { shotTableColumns } from './Columns';
 import {Table} from 'antd';
 function TeamPage(props) {
     let { team_name } = useParams();
     const [teamInfo, setTeamInfo] = useState({});
     const [teamShots, setTeamShots] = useState({});
     const [luck, setLuck] = useState({});
+    const [currGame, setCurrGame] = useState(-1);
+    const [specificGame, setSpecificGame] = useState({});
+
+    const specificGameColumns = [
+        {
+            title: 'Quarter',
+            dataIndex:'quarter',
+            key:'quarter'
+        },
+        {
+            title: 'Player',
+            dataIndex: 'namePlayer',
+            key: 'namePlayer',
+            render: (name) => <a href={`/players/${name}`}>{name}</a>
+        },
+        {
+            title: 'Minutes Remaining',
+            dataIndex: 'minRemaining',
+            key: 'minRemaining',
+        },
+        {
+            title: 'Seconds Remaining',
+            dataIndex: 'secRemaining',
+            key: 'secRemaining'
+        },
+        {
+            title: 'Shot Type',
+            dataIndex: 'typeShot',
+            key: 'typeShot'
+        },
+        {
+            title: 'Distance From Basket',
+            dataIndex: 'distance',
+            key: 'distance'
+        },
+        {
+            title: 'Made',
+            dataIndex: 'made',
+            key: 'made',
+            render: (made) => <span>{made}</span>
+        }
+    ]
+
+    useEffect(() => {
+        if (currGame > 0) {
+            getShotsTeamGame(team_name, currGame).then(res => {
+                setSpecificGame(res.results);
+            })
+        }
+    }, [currGame])
+
+    const luckColumns = [
+        { 
+            title: 'Game ID',
+            dataIndex: 'gameID',
+            key: 'gameID',
+            sorter: (a, b) => a.gameID - b.gameID,
+            render: (text) => <span style={{color: 'blue'}} onClick={() => setCurrGame(text)}>{text}</span>
+        },
+        {
+            title: 'Matchup',
+            dataIndex: 'Matchup',
+            key: 'Matchup',
+            sorter: (a, b) => a.Matchup - b.Matchup
+        },
+        {
+            title: 'Date',
+            dataIndex: 'date',
+            key: 'date',
+            sorter: (a, b) => a.date - b.date
+        },
+        {
+            title: 'Attempts',
+            dataIndex: 'attempts',
+            key: 'attempts',
+            sorter: (a, b) => a.attempts - b.attempts
+        },
+        {
+            title: 'Luck Index',
+            dataIndex: 'luck_index',
+            key: 'luck_index',
+            sorter: (a, b) => a.luck_index - b.luck_index
+        }
+    ]
 
     useEffect(() => {
         getTeamInfo(team_name).then(res => {
@@ -19,7 +103,6 @@ function TeamPage(props) {
             setTeamShots(res.results)
         });
         getLuckiestPerformancesForTeam(team_name).then(res => {
-            console.log(res);
             setLuck(res.results)
         })
     }, [])
@@ -56,6 +139,18 @@ function TeamPage(props) {
                         dataSource={luck} 
                         columns={luckColumns} 
                         style={{ width: '70vw' }}
+                        rowKey="Id"
+                    />
+                </div>
+            }
+            {
+                Object.keys(specificGame).length > 0 &&
+                <div>
+                    <h2>Shots Taken During {specificGame[0].matchup} ({specificGame[0].date})</h2>
+                    <Table
+                        dataSource={specificGame}
+                        columns={specificGameColumns}
+                        style={{ width: '70vw'}}
                         rowKey="Id"
                     />
                 </div>

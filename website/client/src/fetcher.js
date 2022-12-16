@@ -127,6 +127,27 @@ const getLuckiestPerformancesForTeam = async (name) => {
     return res.json();
 }
 
+const getClutchPlayerGames = async (name) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/game/clutch`, {
+        method: 'GET'
+    })
+    return res.json();
+}
+
+const getShotsPlayerGame = async (name, game) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/player/game/shots?name=${name}&game=${game}`, {
+        method: 'GET'
+    })
+    return res.json();
+}
+
+const getShotsTeamGame = async (name, game) => {
+    var res = await fetch(`http://${config.server_host}:${config.server_port}/team/game/shots?name=${name}&game=${game}`, {
+        method: 'GET'
+    })
+    return res.json();
+}
+
 export {
     getAllShotsOfPlayer,
     getGameShotsOfPlayer,
@@ -145,5 +166,8 @@ export {
     getClutchestPerformancesForPlayer,
     getTeamInfo,
     getTeamShotPerformances,
-    getLuckiestPerformancesForTeam
+    getLuckiestPerformancesForTeam,
+    getClutchPlayerGames,
+    getShotsPlayerGame,
+    getShotsTeamGame
 }

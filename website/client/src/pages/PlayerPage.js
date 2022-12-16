@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 
 import MenuBar from '../components/MenuBar';
-import { getPlayerInfo, getPlayerShotPerformances, getIdealShotDistribution, getLuckiestPerformancesForPlayer, getClutchestPerformancesForPlayer } from '../fetcher';
-import { shotDistributionColumns, shotTableColumns, luckColumns, clutchColumns } from './Columns';
+import { getPlayerInfo, getPlayerShotPerformances, getIdealShotDistribution, getLuckiestPerformancesForPlayer, getClutchestPerformancesForPlayer, getShotsPlayerGame } from '../fetcher';
+import { shotDistributionColumns, shotTableColumns, specificGameColumns } from './Columns';
 
 import {Table} from 'antd';
 function PlayerPage(props) {
@@ -13,9 +13,120 @@ function PlayerPage(props) {
     const [idealShots, setIdealShots] = useState({});
     const [luck, setLuck] = useState({});
     const [clutch, setClutch] = useState({});
+    const [currGame, setCurrGame] = useState(-1);
+    const [specificGame, setSpecificGame] = useState({});
+
+    const specificGameColumns = [
+        {
+            title: 'Quarter',
+            dataIndex:'quarter',
+            key:'quarter'
+        },
+        {
+            title: 'Minutes Remaining',
+            dataIndex: 'minRemaining',
+            key: 'minRemaining',
+        },
+        {
+            title: 'Seconds Remaining',
+            dataIndex: 'secRemaining',
+            key: 'secRemaining'
+        },
+        {
+            title: 'Shot Type',
+            dataIndex: 'typeShot',
+            key: 'typeShot'
+        },
+        {
+            title: 'Distance From Basket',
+            dataIndex: 'distance',
+            key: 'distance'
+        },
+        {
+            title: 'Made',
+            dataIndex: 'made',
+            key: 'made',
+            render: (made) => <span>{made}</span>
+        }
+    ]
 
     useEffect(() => {
-        console.log(player_name);
+        if (currGame > 0) {
+            getShotsPlayerGame(player_name, currGame).then(res => {
+                setSpecificGame(res.results);
+            })
+        }
+    }, [currGame])
+
+    const luckColumns = [
+        { 
+            title: 'Game ID',
+            dataIndex: 'gameID',
+            key: 'gameID',
+            sorter: (a, b) => a.gameID - b.gameID,
+            render: (text) => <span style={{color: 'blue'}} onClick={() => setCurrGame(text)}>{text}</span>
+        },
+        {
+            title: 'Matchup',
+            dataIndex: 'Matchup',
+            key: 'Matchup',
+            sorter: (a, b) => a.Matchup - b.Matchup
+        },
+        {
+            title: 'Date',
+            dataIndex: 'date',
+            key: 'date',
+            sorter: (a, b) => a.date - b.date
+        },
+        {
+            title: 'Attempts',
+            dataIndex: 'attempts',
+            key: 'attempts',
+            sorter: (a, b) => a.attempts - b.attempts
+        },
+        {
+            title: 'Luck Index',
+            dataIndex: 'luck_index',
+            key: 'luck_index',
+            sorter: (a, b) => a.luck_index - b.luck_index
+        }
+    ]
+    
+    const clutchColumns = [
+        { 
+            title: 'Game ID',
+            dataIndex: 'gameID',
+            key: 'gameID',
+            sorter: (a, b) => a.gameID - b.gameID,
+            render: (text) => <span style={{color: 'blue'}}onClick={() => setCurrGame(text)}>{text}</span>
+        },
+        {
+            title: 'Matchup',
+            dataIndex: 'matchup',
+            key: 'matchup',
+            sorter: (a, b) => a.matchup - b.matchup
+        },
+        {
+            title: 'Date',
+            dataIndex: 'date',
+            key: 'date',
+            sorter: (a, b) => a.date - b.date
+        },
+        {
+            title: 'Attempts',
+            dataIndex: 'attempts',
+            key: 'attempts',
+            sorter: (a, b) => a.attempts - b.attempts
+        },
+        {
+            title: 'Clutch Score',
+            dataIndex: 'clutch_score',
+            key: 'clutch_score',
+            sorter: (a, b) => a.clutch_score - b.clutch_score
+        }
+    ]
+
+    useEffect(() => {
         getPlayerInfo(player_name).then(res => {
             setPlayerInfo(res.results)
         });
@@ -85,6 +196,18 @@ function PlayerPage(props) {
                         dataSource={clutch} 
                         columns={clutchColumns} 
                         style={{ width: '70vw' }}
+                        rowKey="Id"
+                    />
+                </div>
+            }
+            {
+                Object.keys(specificGame).length > 0 &&
+                <div>
+                    <h2>Shots Taken During {specificGame[0].matchup} ({specificGame[0].date})</h2>
+                    <Table
+                        dataSource={specificGame}
+                        columns={specificGameColumns}
+                        style={{ width: '70vw'}}
                         rowKey="Id"
                     />
                 </div>

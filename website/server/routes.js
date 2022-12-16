@@ -510,7 +510,7 @@ async function getTeamShotPerformances(req, res) {
 async function getTeamInfo(req, res) {
     const name = req.query.name ? req.query.name : "Atlanta Hawks"
 
-    connection.query(`SELECT name, city, wins, losses, playoffApps, divisionTitles, confTitles, championships FROM Teams WHERE name = '${name}' LIMIT 1`, function(error, results, fields) {
+    connection.query(`SELECT name, city, wins, losses, playoffApps, divisionTitles, confTitles, championships, url FROM Teams WHERE name = '${name}' LIMIT 1`, function(error, results, fields) {
         if (error) {
             console.log(error);
             res.json({ error: error });
@@ -598,7 +598,7 @@ async function getLuckiestPerformancesForTeam(req, res) {
 
 // Route 20 
 // Query to get all shots for game and team 
-async function getShotsPlayerGame(req, res) {
+async function getShotsTeamGame(req, res) {
     const name = req.query.name ? req.query.name : "Atlanta Hawks"
     const gameID = req.query.game ? req.query.game : 2190080
 
@@ -619,7 +619,7 @@ async function getShotsPlayerGame(req, res) {
 
 // Route 21
 // Query to get list of most clutch games
-async function getShotsPlayerGame(req, res) {
+async function getClutchPlayerGames(req, res) {
     const minAttempts = req.query.minAttempts ? req.query.minAttempts : 8
 
 
@@ -692,5 +692,8 @@ module.exports = {
     getTeamShotPerformances,
     getLuckiestPerformancesForPlayer,
     getLuckiestPerformancesForTeam,
-    getClutchestPerformancesForPlayer
+    getClutchestPerformancesForPlayer,
+    getClutchPlayerGames,
+    getShotsPlayerGame,
+    getShotsTeamGame
 }
