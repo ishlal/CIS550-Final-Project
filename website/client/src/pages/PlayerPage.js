@@ -1,13 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import { useParams } from 'react-router-dom';
 
 import MenuBar from '../components/MenuBar';
+import { useHistory } from 'react-router-dom';
 import { getPlayerInfo, getPlayerShotPerformances, getIdealShotDistribution, getLuckiestPerformancesForPlayer, getClutchestPerformancesForPlayer, getShotsPlayerGame } from '../fetcher';
 import { shotDistributionColumns, shotTableColumns, specificGameColumns } from './Columns';
 
 import {Table} from 'antd';
 function PlayerPage(props) {
     let { player_name } = useParams();
+    const history = useHistory();
     const [playerInfo, setPlayerInfo] = useState({});
     const [playerShots, setPlayerShots] = useState({});
     const [idealShots, setIdealShots] = useState({});
@@ -15,6 +17,8 @@ function PlayerPage(props) {
     const [clutch, setClutch] = useState({});
     const [currGame, setCurrGame] = useState(-1);
     const [specificGame, setSpecificGame] = useState({});
+    const luckMinRef = useRef();
+    const clutchMinRef = useRef();
 
     const specificGameColumns = [
         {
@@ -129,6 +133,10 @@ function PlayerPage(props) {
     useEffect(() => {
         getPlayerInfo(player_name).then(res => {
             setPlayerInfo(res.results)
+            if (res.results.length === 0) {
+                console.log("player does not exist!");
+                history.push((`/players`));
+            }
         });
         getPlayerShotPerformances(player_name).then(res => {
             setPlayerShots(res.results)
@@ -143,6 +151,20 @@ function PlayerPage(props) {
             setClutch(res.results)
         })
     }, [])
+
+    const luckOnSubmit = (e) => {
+        e.preventDefault();
+        getLuckiestPerformancesForPlayer(player_name, luckMinRef.current.value).then(res => {
+            setLuck(res.results);
+        })
+    }
+
+    const clutchOnSubmit = (e) => {
+        e.preventDefault();
+        getClutchestPerformancesForPlayer(player_name, clutchMinRef.current.value).then(res => {
+            setClutch(res.results);
+        })
+    }
 
     return (
         <div>
@@ -181,6 +203,11 @@ function PlayerPage(props) {
             {Object.keys(luck).length > 0 &&
                 <div className="text-center mt-5">
                     <h2>Luckiest Performances</h2>
+                    <form onSubmit={luckOnSubmit}>
+                        <label>Minimum Attempts: </label>
+                        <input type="text" ref={luckMinRef}/>
+                        <input type="submit"/>
+                    </form>
                     <Table 
                         dataSource={luck} 
                         columns={luckColumns} 
@@ -192,6 +219,11 @@ function PlayerPage(props) {
             {Object.keys(clutch).length > 0 &&
                 <div className="text-center mt-5">
                     <h2>Most Clutch Performances</h2>
+                    <form onSubmit={clutchOnSubmit}>
+                        <label>Minimum Attempts: </label>
+                        <input type="text" ref={clutchMinRef}/>
+                        <input type="submit"/>
+                    </form>
                     <Table 
                         dataSource={clutch} 
                         columns={clutchColumns} 

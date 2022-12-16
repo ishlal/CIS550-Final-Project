@@ -2,11 +2,13 @@ import React, {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 
 import MenuBar from '../components/MenuBar';
+import {useHistory} from 'react-router-dom';
 import { getTeamInfo, getTeamShotPerformances, getLuckiestPerformancesForTeam, getShotsTeamGame } from '../fetcher';
 import { shotTableColumns } from './Columns';
 import {Table} from 'antd';
 function TeamPage(props) {
     let { team_name } = useParams();
+    const history = useHistory();
     const [teamInfo, setTeamInfo] = useState({});
     const [teamShots, setTeamShots] = useState({});
     const [luck, setLuck] = useState({});
@@ -97,7 +99,11 @@ function TeamPage(props) {
 
     useEffect(() => {
         getTeamInfo(team_name).then(res => {
-            setTeamInfo(res.results[0])
+            if (res.results.length === 0) {
+                console.log("team does not exist!");
+                history.push(('/teams'));
+            }
+            setTeamInfo(res.results[0]);
         });
         getTeamShotPerformances(team_name).then(res => {
             setTeamShots(res.results)

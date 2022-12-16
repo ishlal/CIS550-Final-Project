@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 
 import MenuBar from '../components/MenuBar';
 import { getClutchPlayers, getClutchPlayerGames } from '../fetcher';
 import { Table } from 'antd';
 
 function ClutchPage(props) {
+    const clutchMinRef = useRef();
     const [clutch, setClutch] = useState({});
     const [clutchGames, setClutchGames] = useState({});
     const tableColumns = [
@@ -70,10 +71,16 @@ function ClutchPage(props) {
             setClutch(res.results)
         });
         getClutchPlayerGames().then(res => {
-            console.log(res.results);
             setClutchGames(res.results)
         })
     }, [])
+
+    const clutchOnSubmit = (e) => {
+        e.preventDefault();
+        getClutchPlayers(clutchMinRef.current.value).then(res => {
+            setClutch(res.results);
+        })
+    }
 
     return (
         <div>
@@ -84,6 +91,11 @@ function ClutchPage(props) {
                 {Object.keys(clutch).length > 0 &&
                     <div className="text-center mt-5">
                         <h1>Most Clutch Players</h1>
+                        <form onSubmit={clutchOnSubmit}>
+                            <label>Minimum Attempts: </label>
+                            <input type="text" ref={clutchMinRef}/>
+                            <input type="submit"/>
+                        </form>
                         <Table 
                             dataSource={clutch} 
                             columns={tableColumns} 
