@@ -150,7 +150,7 @@ Description: gets list of most clutch games
 
 Expected (Output) Behavior:
 * If minAttempts is not specified, defaults to 8.
-* **Returns the most clutch games overall **
+* **Returns the most clutch games overall**
 
 **Route 22**: /player/clutch
 
