@@ -18,7 +18,8 @@ function TeamsPage(props) {
             <div className="text-center mt-5">
                 <h1>Teams Page!</h1>
                 <form onSubmit={onSubmit}>
-                    <input type="text" ref={teamRef}/>
+                    <label for="team" className="mr-2">Team Name:</label>
+                    <input type="text" ref={teamRef} id="team"/>
                     <input type="submit" value="Search!"/>
                 </form>
             </div>
