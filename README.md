@@ -1,5 +1,25 @@
 # CIS550-Final-Project
 
+# Running the Application
+
+In two terminal / bash shells, do the following:
+
+Shell 1:
+```
+cd website/client
+mpm install
+mpm start
+```
+
+Shell 2:
+```
+cd website/server
+mpm install
+mpm start
+```
+
+The development server should now open up from your window. 
+
 # Motivation
 As NBA fans, we enjoy not only watching NBA games but also discussing them with our friends. Oftentimes in
 these discussions, we’ve noticed that there is information/metrics we want to reference but don’t have an easy
