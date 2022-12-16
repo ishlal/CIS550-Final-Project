@@ -93,7 +93,7 @@ function ClutchPage(props) {
                         <h1>Most Clutch Players</h1>
                         <form onSubmit={clutchOnSubmit}>
                             <label>Minimum Attempts: </label>
-                            <input type="text" ref={clutchMinRef}/>
+                            <input type="number" ref={clutchMinRef}/>
                             <input type="submit"/>
                         </form>
                         <Table 

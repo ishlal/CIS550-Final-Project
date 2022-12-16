@@ -205,7 +205,7 @@ function PlayerPage(props) {
                     <h2>Luckiest Performances</h2>
                     <form onSubmit={luckOnSubmit}>
                         <label>Minimum Attempts: </label>
-                        <input type="text" ref={luckMinRef}/>
+                        <input type="number" ref={luckMinRef}/>
                         <input type="submit"/>
                     </form>
                     <Table 
@@ -221,7 +221,7 @@ function PlayerPage(props) {
                     <h2>Most Clutch Performances</h2>
                     <form onSubmit={clutchOnSubmit}>
                         <label>Minimum Attempts: </label>
-                        <input type="text" ref={clutchMinRef}/>
+                        <input type="number" ref={clutchMinRef}/>
                         <input type="submit"/>
                     </form>
                     <Table 
