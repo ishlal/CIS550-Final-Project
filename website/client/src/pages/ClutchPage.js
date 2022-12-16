@@ -27,7 +27,7 @@ function ClutchPage(props) {
             title: 'Attempts',
             dataIndex: 'attempts',
             key: 'attempts',
-            sorter: (a, b) => a.attempts - b.attemps
+            sorter: (a, b) => a.attempts - b.attempts
         }
     ];
 
@@ -43,13 +43,11 @@ function ClutchPage(props) {
             title: 'Date',
             dataIndex: 'date',
             key: 'date',
-            sorter: (a, b) => a.date.localeCompare(b.date)
         },
         {
             title: 'Matchup',
             dataIndex: 'matchup',
             key: 'matchup',
-            sorter: (a, b) => a.matchup.localeCompare(b.matchup)
         },
         {
             title: 'Clutch Index',
@@ -62,7 +60,7 @@ function ClutchPage(props) {
             title: 'Attempts',
             dataIndex: 'attempts',
             key: 'attempts',
-            sorter: (a, b) => a.attempts - b.attemps
+            sorter: (a, b) => a.attempts - b.attempts
         }
     ]
 
@@ -91,9 +89,9 @@ function ClutchPage(props) {
                 {Object.keys(clutch).length > 0 &&
                     <div className="text-center mt-5">
                         <h2>Most Clutch Players</h2>
-                        <form onSubmit={clutchOnSubmit}>
-                            <label>Minimum Attempts: </label>
-                            <input type="number" ref={clutchMinRef}/>
+                        <form onSubmit={clutchOnSubmit} className="mt-5">
+                            <label for="min" className="mr-2">Minimum Attempts: </label>
+                            <input type="number" ref={clutchMinRef} id="min"/>
                             <input type="submit"/>
                         </form>
                         <Table 
@@ -114,6 +112,7 @@ function ClutchPage(props) {
                             pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }} 
                             style={{ width: '70vw', margin: '0 auto', marginTop: '2vh' }}
                             rowKey="Id"
+                            className="mt-5"
                         />
                     </div>
                 }

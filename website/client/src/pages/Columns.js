@@ -73,13 +73,11 @@ const shotDistributionColumns = [
         title: 'Zone Name',
         dataIndex: 'zoneBasic',
         key: 'zoneBasic',
-        sorter: (a, b) => a.zoneBasic - b.zoneBasic
     },
     {
         title: 'Zone Range',
         dataIndex: 'zoneRange',
         key: 'zoneRange',
-        sorter: (a, b) => a.zoneRange - b.zoneRange
     },
     {
         title: 'Make Percentage',

@@ -35,7 +35,7 @@ function LuckPage(props) {
             title: 'Attempts',
             dataIndex: 'attempts',
             key: 'attempts',
-            sorter: (a, b) => a.attempts - b.attemps
+            sorter: (a, b) => a.attempts - b.attempts
         }
     ];
 

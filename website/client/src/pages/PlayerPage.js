@@ -74,13 +74,11 @@ function PlayerPage(props) {
             title: 'Matchup',
             dataIndex: 'Matchup',
             key: 'Matchup',
-            sorter: (a, b) => a.Matchup - b.Matchup
         },
         {
             title: 'Date',
             dataIndex: 'date',
             key: 'date',
-            sorter: (a, b) => a.date - b.date
         },
         {
             title: 'Attempts',
@@ -108,13 +106,11 @@ function PlayerPage(props) {
             title: 'Matchup',
             dataIndex: 'matchup',
             key: 'matchup',
-            sorter: (a, b) => a.matchup - b.matchup
         },
         {
             title: 'Date',
             dataIndex: 'date',
             key: 'date',
-            sorter: (a, b) => a.date - b.date
         },
         {
             title: 'Attempts',
@@ -184,7 +180,7 @@ function PlayerPage(props) {
                         dataSource={playerShots} 
                         columns={shotTableColumns} 
                         pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }} 
-                        className="ml-5 mr-5"
+                        className="ml-5 mr-5 mt-5"
                         rowKey="slugSeason"
                     />
                 </div>
@@ -195,7 +191,7 @@ function PlayerPage(props) {
                     <Table 
                         dataSource={idealShots} 
                         columns={shotDistributionColumns} 
-                        className="ml-5 mr-5"
+                        className="ml-5 mr-5 mt-5"
                         rowKey="Id"
                     />
                 </div>
@@ -204,8 +200,8 @@ function PlayerPage(props) {
                 <div className="text-center mt-5">
                     <h2>Luckiest Performances</h2>
                     <form onSubmit={luckOnSubmit}>
-                        <label>Minimum Attempts: </label>
-                        <input type="number" ref={luckMinRef}/>
+                        <label for="luckMin" className="mr-2 mt-5">Minimum Attempts: </label>
+                        <input type="number" ref={luckMinRef} id="luckMin"/>
                         <input type="submit"/>
                     </form>
                     <Table 
@@ -220,8 +216,8 @@ function PlayerPage(props) {
                 <div className="text-center mt-5">
                     <h2>Most Clutch Performances</h2>
                     <form onSubmit={clutchOnSubmit}>
-                        <label>Minimum Attempts: </label>
-                        <input type="number" ref={clutchMinRef}/>
+                        <label for="clutchMin" className="mr-2 mt-5">Minimum Attempts: </label>
+                        <input type="number" ref={clutchMinRef} id="clutchMin"/>
                         <input type="submit"/>
                     </form>
                     <Table 
@@ -239,7 +235,7 @@ function PlayerPage(props) {
                     <Table
                         dataSource={specificGame}
                         columns={specificGameColumns}
-                        className="ml-5 mr-5"
+                        className="ml-5 mr-5 mt-5"
                         rowKey="Id"
                     />
                 </div>

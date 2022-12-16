@@ -75,13 +75,11 @@ function TeamPage(props) {
             title: 'Matchup',
             dataIndex: 'Matchup',
             key: 'Matchup',
-            sorter: (a, b) => a.Matchup - b.Matchup
         },
         {
             title: 'Date',
             dataIndex: 'date',
             key: 'date',
-            sorter: (a, b) => a.date - b.date
         },
         {
             title: 'Attempts',
@@ -133,7 +131,7 @@ function TeamPage(props) {
                         dataSource={teamShots} 
                         columns={shotTableColumns} 
                         pagination={{ pageSizeOptions:[5, 10], defaultPageSize: 5, showQuickJumper:true }} 
-                        className="ml-5 mr-5"
+                        className="ml-5 mr-5 mt-5"
                         rowKey="slugSeason"
                     />
                 </div>
@@ -144,7 +142,7 @@ function TeamPage(props) {
                     <Table 
                         dataSource={luck} 
                         columns={luckColumns} 
-                        className="ml-5 mr-5"
+                        className="ml-5 mr-5 mt-5"
                         rowKey="Id"
                     />
                 </div>
@@ -156,7 +154,7 @@ function TeamPage(props) {
                     <Table
                         dataSource={specificGame}
                         columns={specificGameColumns}
-                        className="ml-5 mr-5"
+                        className="ml-5 mr-5 mt-5"
                         rowKey="Id"
                     />
                 </div>

@@ -16,7 +16,7 @@ import LuckPage from './pages/LuckPage';
 import 'antd/dist/antd.css';
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import "shards-ui/dist/css/shards.min.css"
+import "shards-ui/dist/css/shards.min.css";
 
 ReactDOM.render(
   <div>
